@@ -5,56 +5,60 @@
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #07080c;
-  --bg-soft: #0b0d13;
-  --surface: #10131a;
-  --surface-2: #161a23;
-  --surface-3: #1d2230;
+  --bg: #060a0c;
+  --bg-soft: #0a0f12;
+  --surface: #0e1518;
+  --surface-2: #142024;
+  --surface-3: #1b2a2f;
   --border: rgb(255 255 255 / 0.07);
   --border-strong: rgb(255 255 255 / 0.13);
-  --text: #e8eaf0;
-  --text-muted: #a2aabb;
-  --text-subtle: #6f7789;
-  --accent: #f2c14e;
-  --accent-strong: #ffd479;
-  --accent-ink: #1a1405;
-  --accent-soft: rgb(242 193 78 / 0.12);
-  --accent-2: #8ea2ff;
-  --link: #f5cd6e;
-  --code-bg: #0c0f15;
+  --text: #e5eef0;
+  --text-muted: #9caeb3;
+  --text-subtle: #687c82;
+  --accent: #3dd9c1;
+  --accent-strong: #8cf0e1;
+  --accent-solid: #2cc7b4;
+  --accent-fill: linear-gradient(135deg, #34d8c0 0%, #3cb6f4 100%);
+  --accent-ink: #03191c;
+  --accent-soft: rgb(61 217 193 / 0.12);
+  --accent-2: #4cb8ff;
+  --link: #66e3d1;
+  --code-bg: #0a1114;
   --code-inline-bg: rgb(255 255 255 / 0.06);
-  --code-inline-text: #f3d48a;
+  --code-inline-text: #86ead9;
   --placeholder: #ff9d4d;
   --shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 20px 50px -20px rgb(0 0 0 / 0.7);
-  --glow: radial-gradient(60rem 30rem at 15% -10%, rgb(242 193 78 / 0.13), transparent 60%),
-    radial-gradient(50rem 30rem at 95% 0%, rgb(142 162 255 / 0.12), transparent 60%);
+  --glow: radial-gradient(60rem 30rem at 15% -10%, rgb(45 212 191 / 0.13), transparent 60%),
+    radial-gradient(50rem 30rem at 95% 0%, rgb(56 160 248 / 0.12), transparent 60%);
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #fbfaf7;
-  --bg-soft: #f5f3ee;
+  --bg: #f8fafa;
+  --bg-soft: #f0f5f5;
   --surface: #ffffff;
-  --surface-2: #f4f2ec;
-  --surface-3: #ebe8df;
-  --border: rgb(20 22 28 / 0.08);
-  --border-strong: rgb(20 22 28 / 0.15);
-  --text: #15171d;
-  --text-muted: #525a69;
-  --text-subtle: #7b8291;
-  --accent: #b7791f;
-  --accent-strong: #975a16;
+  --surface-2: #edf3f3;
+  --surface-3: #e1eaeb;
+  --border: rgb(12 30 34 / 0.08);
+  --border-strong: rgb(12 30 34 / 0.15);
+  --text: #0f1a1d;
+  --text-muted: #4b5d62;
+  --text-subtle: #74868b;
+  --accent: #0b8579;
+  --accent-strong: #08665d;
+  --accent-solid: #0f766e;
+  --accent-fill: linear-gradient(135deg, #0f766e 0%, #0369a1 100%);
   --accent-ink: #ffffff;
-  --accent-soft: rgb(183 121 31 / 0.1);
-  --accent-2: #4b63d8;
-  --link: #9a5b0b;
-  --code-bg: #f6f5f1;
-  --code-inline-bg: rgb(20 22 28 / 0.06);
-  --code-inline-text: #8a4b06;
+  --accent-soft: rgb(13 148 136 / 0.1);
+  --accent-2: #0369a1;
+  --link: #0a7a6f;
+  --code-bg: #f3f7f7;
+  --code-inline-bg: rgb(12 30 34 / 0.05);
+  --code-inline-text: #0b6b62;
   --placeholder: #c2410c;
-  --shadow: 0 1px 2px rgb(20 22 28 / 0.04), 0 18px 40px -24px rgb(20 22 28 / 0.25);
-  --glow: radial-gradient(60rem 30rem at 15% -10%, rgb(242 193 78 / 0.18), transparent 60%),
-    radial-gradient(50rem 30rem at 95% 0%, rgb(142 162 255 / 0.16), transparent 60%);
+  --shadow: 0 1px 2px rgb(12 30 34 / 0.04), 0 18px 40px -24px rgb(12 30 34 / 0.25);
+  --glow: radial-gradient(60rem 30rem at 15% -10%, rgb(45 212 191 / 0.14), transparent 60%),
+    radial-gradient(50rem 30rem at 95% 0%, rgb(56 160 248 / 0.13), transparent 60%);
 }
 
 :root {
@@ -133,7 +137,7 @@ a {
 }
 
 ::selection {
-  background: var(--accent);
+  background: var(--accent-solid);
   color: var(--accent-ink);
 }
 
@@ -183,7 +187,7 @@ p {
   z-index: 100;
   padding: 0.6rem 1rem;
   border-radius: var(--radius-sm);
-  background: var(--accent);
+  background: var(--accent-solid);
   color: var(--accent-ink);
   font-weight: 600;
 }
@@ -240,14 +244,16 @@ p {
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: var(--accent-fill);
   border-color: transparent;
   color: var(--accent-ink);
+  box-shadow: 0 8px 24px -10px var(--accent-solid);
 }
 
 .btn-primary:hover {
-  background: var(--accent-strong);
+  background: var(--accent-fill);
   border-color: transparent;
+  filter: brightness(1.12);
 }
 
 .chip {
@@ -642,6 +648,8 @@ a.chip:hover,
 :root .astro-code span.code-placeholder {
   color: var(--placeholder);
   font-weight: 600;
+  background: color-mix(in srgb, var(--placeholder) 13%, transparent);
+  border-radius: 3px;
 }
 
 /* ---------- Utilities ---------- */

@@ -1,6 +1,11 @@
 ---
-// Decorative hero illustration: a DAX "editor" window and a small result chart.
-const bars = [38, 52, 46, 64, 58, 76, 70, 88, 82, 100];
+// Decorative hero illustration: a DAX "editor" window and a small result sparkline.
+const values = [46, 40, 43, 33, 37, 27, 30, 19, 23, 9];
+const step = 200 / (values.length - 1);
+const pts = values.map((y, i) => `${(i * step).toFixed(1)},${y}`);
+const line = `M${pts.join(' L')}`;
+const area = `${line} L200,64 L0,64 Z`;
+const last = pts.at(-1)!.split(',');
 ---
 
 <div class="visual" aria-hidden="true">
@@ -26,8 +31,22 @@ const bars = [38, 52, 46, 64, 58, 76, 70, 88, 82, 100];
       <span>Revenue YoY %</span>
       <strong>+18.4%</strong>
     </div>
-    <div class="bars">
-      {bars.map((h, i) => <span style={`--h:${h}%;--d:${i * 60}ms`}></span>)}
+    <div class="spark-wrap">
+    <svg class="spark" viewBox="0 0 200 64" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="hv-area" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.4"></stop>
+          <stop offset="1" stop-color="#2dd4bf" stop-opacity="0"></stop>
+        </linearGradient>
+        <linearGradient id="hv-line" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#2dd4bf"></stop>
+          <stop offset="1" stop-color="#38a8f8"></stop>
+        </linearGradient>
+      </defs>
+      <path d={area} fill="url(#hv-area)"></path>
+      <path d={line} class="spark-line" stroke="url(#hv-line)" fill="none" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" pathLength="1"></path>
+    </svg>
+    <span class="spark-dot" style={`left:${(+last[0] / 200) * 100}%;top:${(+last[1] / 64) * 100}%`}></span>
     </div>
   </div>
 
@@ -68,7 +87,7 @@ const bars = [38, 52, 46, 64, 58, 76, 70, 88, 82, 100];
     inset: -40% -20% auto auto;
     width: 70%;
     height: 80%;
-    background: radial-gradient(circle, rgb(242 193 78 / 0.18), transparent 65%);
+    background: radial-gradient(circle, rgb(45 212 191 / 0.16), transparent 65%);
     pointer-events: none;
   }
 
@@ -138,23 +157,23 @@ const bars = [38, 52, 46, 64, 58, 76, 70, 88, 82, 100];
   }
 
   .kw {
-    color: #ff7b72;
+    color: #4d9375;
   }
 
   .fn {
-    color: #d2a8ff;
+    color: #80a665;
   }
 
   .ms {
-    color: #79c0ff;
+    color: #6394bf;
   }
 
   .t {
-    color: #ffa657;
+    color: #c98a7d;
   }
 
   .v {
-    color: #f2c14e;
+    color: #bd976a;
   }
 
   .op {
@@ -162,23 +181,23 @@ const bars = [38, 52, 46, 64, 58, 76, 70, 88, 82, 100];
   }
 
   :global(:root[data-theme='light']) .kw {
-    color: #cf222e;
+    color: #1e754f;
   }
 
   :global(:root[data-theme='light']) .fn {
-    color: #8250df;
+    color: #59873a;
   }
 
   :global(:root[data-theme='light']) .ms {
-    color: #0550ae;
+    color: #296aa3;
   }
 
   :global(:root[data-theme='light']) .t {
-    color: #953800;
+    color: #b56959;
   }
 
   :global(:root[data-theme='light']) .v {
-    color: #9a6700;
+    color: #b07d48;
   }
 
   .chart {
@@ -208,31 +227,38 @@ const bars = [38, 52, 46, 64, 58, 76, 70, 88, 82, 100];
     font-size: 0.85rem;
   }
 
-  .bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 5px;
+  .spark-wrap {
+    position: relative;
     height: 64px;
   }
 
-  .bars span {
-    flex: 1;
-    height: var(--h);
-    border-radius: 4px 4px 2px 2px;
-    background: linear-gradient(to top, color-mix(in srgb, var(--accent) 35%, transparent), var(--accent));
-    transform-origin: bottom;
-    animation: grow 0.9s var(--ease) both;
-    animation-delay: var(--d);
+  .spark {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
   }
 
-  .bars span:last-child {
-    background: linear-gradient(to top, color-mix(in srgb, var(--accent-2) 40%, transparent), var(--accent-2));
+  .spark-line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1.4s var(--ease) 0.2s forwards;
   }
 
-  @keyframes grow {
-    from {
-      transform: scaleY(0);
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
     }
+  }
+
+  .spark-dot {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #38a8f8;
+    box-shadow: 0 0 0 4px rgb(56 168 248 / 0.25);
+    transform: translate(-50%, -50%);
   }
 
   .badge {

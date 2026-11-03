@@ -16,7 +16,7 @@ export default defineConfig({
   markdown: {
     processor: satteri({ hastPlugins: [externalLinks] }),
     shikiConfig: {
-      themes: { dark: 'github-dark-default', light: 'github-light-default' },
+      themes: { dark: 'vitesse-dark', light: 'vitesse-light' },
       defaultColor: false,
       // @ts-ignore - JSON grammar matches LanguageRegistration at runtime
       langs: [daxGrammar],
