@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostArchive from '../../components/PostArchive.astro';
+import { getCategories, getPosts } from '../../utils/posts';
+
+const posts = await getPosts();
+const categories = getCategories(posts);
+---
+
+<BaseLayout
+  title="Articles"
+  description="Every article on Elegant BI: Power BI, Analysis Services, tabular modeling, DAX, automation and best practices."
+>
+  <div class="container">
+    <header class="page-header">
+      <span class="eyebrow">The archive</span>
+      <h1>All articles</h1>
+      <p>
+        {posts.length} deep-dives into tabular modeling, DAX, automation with Tabular Editor, Power BI Premium and more.
+      </p>
+    </header>
+    <PostArchive posts={posts} categories={categories} total={posts.length} />
+  </div>
+</BaseLayout>

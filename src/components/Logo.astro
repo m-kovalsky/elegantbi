@@ -1,0 +1,19 @@
+---
+interface Props {
+  size?: number;
+}
+const { size = 30 } = Astro.props;
+---
+
+<svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true" class="logo-mark">
+  <defs>
+    <linearGradient id="ebi-g" x1="4" y1="28" x2="28" y2="4" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F2C14E"></stop>
+      <stop offset="1" stop-color="#FFE3A3"></stop>
+    </linearGradient>
+  </defs>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="9" fill="#10131A" stroke="rgba(255,255,255,0.12)"></rect>
+  <rect x="7.5" y="16" width="4" height="9" rx="2" fill="url(#ebi-g)" opacity="0.55"></rect>
+  <rect x="14" y="11" width="4" height="14" rx="2" fill="url(#ebi-g)" opacity="0.8"></rect>
+  <rect x="20.5" y="6.5" width="4" height="18.5" rx="2" fill="url(#ebi-g)"></rect>
+</svg>

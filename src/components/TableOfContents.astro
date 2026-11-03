@@ -1,0 +1,73 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const headings = Astro.props.headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{
+  headings.length > 1 && (
+    <nav class="toc" aria-label="Table of contents" data-toc>
+      <p class="toc-title">On this page</p>
+      <ol>
+        {headings.map((h) => (
+          <li class:list={[`depth-${h.depth}`]}>
+            <a href={`#${h.slug}`} data-toc-link={h.slug}>
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    font-size: 0.875rem;
+  }
+
+  .toc-title {
+    margin: 0 0 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid var(--border);
+  }
+
+  a {
+    position: relative;
+    display: block;
+    margin-left: -1px;
+    padding: 0.32rem 0 0.32rem 1rem;
+    border-left: 1px solid transparent;
+    color: var(--text-subtle);
+    line-height: 1.45;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .depth-3 a {
+    padding-left: 1.85rem;
+    font-size: 0.83rem;
+  }
+
+  a:hover {
+    color: var(--text);
+  }
+
+  a[data-active] {
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+</style>

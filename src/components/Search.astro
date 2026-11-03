@@ -1,0 +1,215 @@
+---
+import Icon from './Icon.astro';
+---
+
+<dialog class="search-dialog" data-search-dialog aria-label="Search articles">
+  <div class="search-panel">
+    <div class="search-top">
+      <span class="search-title">Search articles</span>
+      <button type="button" class="search-close" data-search-close aria-label="Close search">
+        <kbd>Esc</kbd>
+        <Icon name="x" size={16} />
+      </button>
+    </div>
+    <div id="pagefind-search" class="pagefind-host" data-pagefind-ignore></div>
+    <p class="search-fallback" data-search-fallback hidden>
+      Search is generated at build time. Run <code>npm run build</code> and <code>npm run preview</code> to try it locally.
+    </p>
+  </div>
+</dialog>
+
+<style is:global>
+  .search-dialog {
+    width: min(720px, calc(100vw - 2rem));
+    max-height: min(78vh, 760px);
+    margin: 10vh auto auto;
+    padding: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--bg-soft);
+    color: var(--text);
+    box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.6);
+    overflow: hidden;
+  }
+
+  .search-dialog[open] {
+    animation: search-in 0.22s var(--ease);
+  }
+
+  .search-dialog::backdrop {
+    background: rgb(3 4 8 / 0.6);
+    backdrop-filter: blur(6px);
+  }
+
+  @keyframes search-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.985);
+    }
+  }
+
+  .search-panel {
+    display: flex;
+    flex-direction: column;
+    max-height: inherit;
+    padding: 1rem 1.1rem 0.5rem;
+  }
+
+  .search-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .search-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+
+  .search-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 0;
+    background: none;
+    color: var(--text-subtle);
+    cursor: pointer;
+  }
+
+  .search-close kbd {
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font: 600 0.7rem/1.2 var(--font-sans);
+  }
+
+  .pagefind-host {
+    overflow-y: auto;
+    padding-bottom: 0.75rem;
+    --pagefind-ui-scale: 0.82;
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--text);
+    --pagefind-ui-background: var(--surface);
+    --pagefind-ui-border: var(--border-strong);
+    --pagefind-ui-tag: var(--surface-2);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 12px;
+    --pagefind-ui-font: var(--font-sans);
+  }
+
+  .pagefind-host .pagefind-ui__search-input {
+    font-weight: 500;
+  }
+
+  .pagefind-host .pagefind-ui__search-input:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .pagefind-host .pagefind-ui__search-clear {
+    background: transparent;
+    color: var(--text-subtle);
+    font-weight: 600;
+  }
+
+  .pagefind-host .pagefind-ui__search-clear:hover {
+    color: var(--text);
+  }
+
+  .pagefind-host .pagefind-ui__search-clear:focus-visible {
+    outline-offset: -4px;
+  }
+
+  .pagefind-host .pagefind-ui__result-link {
+    color: var(--text);
+  }
+
+  .pagefind-host .pagefind-ui__result-link:hover {
+    color: var(--accent);
+  }
+
+  .pagefind-host .pagefind-ui__result-excerpt,
+  .pagefind-host .pagefind-ui__message {
+    color: var(--text-muted);
+  }
+
+  .pagefind-host mark {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+
+  .search-fallback {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-search-dialog]');
+  let loaded = false;
+
+  async function loadPagefind() {
+    if (loaded) return;
+    loaded = true;
+    try {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = '/pagefind/pagefind-ui.css';
+      document.head.append(css);
+      // Pagefind is generated after the Astro build, so load it at runtime rather than bundling it.
+      await new Promise<void>((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = '/pagefind/pagefind-ui.js';
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('pagefind unavailable'));
+        document.head.append(s);
+      });
+      // @ts-ignore
+      new window.PagefindUI({
+        element: '#pagefind-search',
+        showSubResults: true,
+        showImages: false,
+        resetStyles: false,
+        autofocus: true,
+        translations: { placeholder: 'Search DAX, Tabular Editor, Direct Lake…' },
+        processResult: (result: { url: string; sub_results?: { url: string }[] }) => {
+          const clean = (u: string) => u.replace(/\.html(?=$|#)/, '');
+          result.url = clean(result.url);
+          result.sub_results?.forEach((s) => (s.url = clean(s.url)));
+          return result;
+        },
+      });
+    } catch {
+      document.querySelector<HTMLElement>('[data-search-fallback]')?.removeAttribute('hidden');
+    }
+  }
+
+  async function open() {
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    await loadPagefind();
+    dialog.querySelector<HTMLInputElement>('input')?.focus();
+  }
+
+  document.querySelectorAll('[data-search-open]').forEach((btn) => btn.addEventListener('click', open));
+  document.querySelector('[data-search-close]')?.addEventListener('click', () => dialog?.close());
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const target = e.target as HTMLElement;
+    const typing = target.closest('input, textarea, [contenteditable]');
+    if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || (e.key === '/' && !typing)) {
+      e.preventDefault();
+      open();
+    }
+  });
+</script>

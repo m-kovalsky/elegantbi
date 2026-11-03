@@ -1,0 +1,739 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Cover from '../../components/Cover.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import PostCard from '../../components/PostCard.astro';
+import Icon from '../../components/Icon.astro';
+import { SITE } from '../../consts';
+import {
+  categoryUrl,
+  formatDate,
+  getPosts,
+  postUrl,
+  readingTime,
+  relatedPosts,
+  type Post,
+} from '../../utils/posts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      newer: posts[i - 1],
+      older: posts[i + 1],
+      related: relatedPosts(post, posts),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+  related: Post[];
+}
+
+const { post, newer, older, related } = Astro.props;
+const { title, description, pubDate, updatedDate, categories, heroImage, heroAlt } = post.data;
+const { Content, headings } = await render(post);
+const minutes = readingTime(post.body);
+const url = new URL(postUrl(post), Astro.site).href;
+const shareImage = heroImage ? new URL((await getImage({ src: heroImage, width: 1200, format: 'jpeg' })).src, Astro.site).href : undefined;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  author: { '@type': 'Person', name: SITE.author, url: `${SITE.url}/about` },
+  publisher: { '@type': 'Organization', name: SITE.title, url: SITE.url },
+  mainEntityOfPage: url,
+  url,
+  keywords: categories.join(', '),
+  ...(shareImage ? { image: shareImage } : {}),
+};
+
+const share = {
+  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+  x: `https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={heroImage}
+  article={{ published: pubDate, modified: updatedDate, categories }}
+  jsonLd={jsonLd}
+>
+  <div class="progress" aria-hidden="true"><span data-progress></span></div>
+
+  <article class="post">
+    <header class="container post-header">
+      <a href="/blog" class="back"><Icon name="arrow-left" size={15} /> All articles</a>
+      {
+        categories.length > 0 && (
+          <div class="post-cats">
+            {categories.map((c) => (
+              <a href={categoryUrl(c)} class="chip">
+                {c}
+              </a>
+            ))}
+          </div>
+        )
+      }
+      <h1 data-pagefind-meta="title">{title}</h1>
+      <p class="lead">{description}</p>
+      <div class="byline">
+        <span class="avatar" aria-hidden="true">{SITE.authorShort}</span>
+        <div class="byline-text">
+          <a href="/about" class="author">{SITE.author}</a>
+          <div class="byline-meta">
+            <span><Icon name="calendar" size={14} /> <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time></span>
+            {
+              updatedDate && (
+                <span class="updated">
+                  Updated <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate, 'short')}</time>
+                </span>
+              )
+            }
+            <span><Icon name="clock" size={14} /> {minutes} min read</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {
+      heroImage && (
+        <div class="container hero-wrap">
+          <Cover
+            src={heroImage}
+            alt={heroAlt ?? ''}
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 1100px) 900px, 100vw"
+            eager
+            class="hero-cover"
+          />
+        </div>
+      )
+    }
+
+    <div class="container post-layout">
+      <div class="post-main">
+        <div class="prose" data-prose data-pagefind-body>
+          <Content />
+        </div>
+
+        <footer class="post-footer">
+          <div class="post-tags">
+            {categories.map((c) => (
+              <a href={categoryUrl(c)} class="chip">
+                {c}
+              </a>
+            ))}
+          </div>
+          <div class="share">
+            <span>Share</span>
+            <a href={share.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"><Icon name="linkedin" size={15} /></a>
+            <a href={share.x} target="_blank" rel="noopener noreferrer" aria-label="Share on X"><Icon name="x_social" size={15} /></a>
+            <button type="button" data-copy-link={url} aria-label="Copy link"><Icon name="link" size={16} /></button>
+          </div>
+        </footer>
+
+        <aside class="author-card">
+          <span class="avatar avatar-lg" aria-hidden="true">{SITE.authorShort}</span>
+          <div>
+            <p class="author-label">Written by</p>
+            <p class="author-name">{SITE.author}</p>
+            <p class="author-bio">
+              Specializing in Analysis Services, tabular modeling and DAX. Architect of Microsoft's internal best-in-class data
+              models used by 30,000+ people.
+            </p>
+            <div class="author-links">
+              <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer"><Icon name="linkedin" size={14} /> LinkedIn</a>
+              <a href={SITE.github} target="_blank" rel="noopener noreferrer"><Icon name="github" size={15} /> GitHub</a>
+              <a href="/blog-feed.xml"><Icon name="rss" size={15} /> RSS</a>
+            </div>
+          </div>
+        </aside>
+
+        {
+          (newer || older) && (
+            <nav class="pager" aria-label="More articles">
+              {older ? (
+                <a href={postUrl(older)} class="pager-link">
+                  <span class="pager-label"><Icon name="arrow-left" size={14} /> Previous</span>
+                  <span class="pager-title">{older.data.title}</span>
+                </a>
+              ) : (
+                <span />
+              )}
+              {newer && (
+                <a href={postUrl(newer)} class="pager-link pager-next">
+                  <span class="pager-label">Next <Icon name="arrow-right" size={14} /></span>
+                  <span class="pager-title">{newer.data.title}</span>
+                </a>
+              )}
+            </nav>
+          )
+        }
+      </div>
+
+      <aside class="post-aside">
+        <div class="aside-sticky">
+          <TableOfContents headings={headings} />
+          <a href="#top" class="aside-top"><Icon name="arrow-up" size={14} /> Back to top</a>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="container related">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Keep reading</span>
+            <h2>Related articles</h2>
+          </div>
+          <a href="/blog" class="link-arrow">
+            All articles <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+        <div class="post-grid">
+          {related.map((p) => (
+            <PostCard post={p} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <dialog class="lightbox" data-lightbox aria-label="Image preview">
+    <button type="button" class="lightbox-close" data-lightbox-close aria-label="Close image"><Icon name="x" size={20} /></button>
+    <img alt="" data-lightbox-img />
+  </dialog>
+</BaseLayout>
+
+<style>
+  .progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 60;
+    height: 2px;
+    pointer-events: none;
+  }
+
+  .progress span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+
+  .post-header {
+    max-width: calc(var(--prose) + 4rem);
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
+    padding-bottom: 2.25rem;
+    text-align: center;
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1.75rem;
+    color: var(--text-subtle);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .back:hover {
+    color: var(--accent);
+  }
+
+  .post-cats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .post-header h1 {
+    margin: 0 auto 1.1rem;
+    font-size: clamp(2.1rem, 5vw, 3.35rem);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .lead {
+    max-width: 60ch;
+    margin: 0 auto 2rem;
+    color: var(--text-muted);
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .byline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-align: left;
+  }
+
+  .avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #10131a;
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+
+  .avatar-lg {
+    width: 56px;
+    height: 56px;
+    font-size: 1.05rem;
+  }
+
+  .author {
+    font-weight: 600;
+  }
+
+  .author:hover {
+    color: var(--accent);
+  }
+
+  .byline-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+    color: var(--text-subtle);
+    font-size: 0.85rem;
+  }
+
+  .byline-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .hero-wrap {
+    max-width: 1100px;
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .hero-wrap :global(.hero-cover) {
+    aspect-ratio: 21 / 9;
+    max-height: 480px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .hero-wrap :global(.hero-cover .cover-fg) {
+    max-height: 84%;
+  }
+
+  @media (max-width: 700px) {
+    .hero-wrap :global(.hero-cover) {
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  .post-layout {
+    display: grid;
+    grid-template-columns: minmax(0, var(--prose)) 240px;
+    justify-content: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .post-main {
+    min-width: 0;
+  }
+
+  .aside-sticky {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    max-height: calc(100vh - var(--header-h) - 4rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .aside-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1.5rem;
+    color: var(--text-subtle);
+    font-size: 0.83rem;
+    transition: color 0.2s;
+  }
+
+  .aside-top:hover {
+    color: var(--accent);
+  }
+
+  .post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .share {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-subtle);
+    font-size: 0.85rem;
+  }
+
+  .share span {
+    margin-right: 0.3rem;
+  }
+
+  .share a,
+  .share button {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .share a:hover,
+  .share button:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .share button[data-copied] {
+    color: #4ade80;
+    border-color: #4ade80;
+  }
+
+  .author-card {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    padding: 1.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .author-card p {
+    margin: 0;
+  }
+
+  .author-label {
+    color: var(--text-subtle);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .author-name {
+    margin: 0.15rem 0 0.5rem !important;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .author-bio {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .author-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+    margin-top: 0.9rem;
+  }
+
+  .author-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .author-links a:hover {
+    color: var(--accent);
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .pager-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .pager-next {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  .pager-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-subtle);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .pager-next .pager-label {
+    justify-content: flex-end;
+  }
+
+  .pager-title {
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .related {
+    padding-top: clamp(3.5rem, 8vw, 5.5rem);
+  }
+
+  .lightbox {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    padding: clamp(1rem, 4vw, 3rem);
+    border: 0;
+    background: transparent;
+    cursor: zoom-out;
+  }
+
+  .lightbox[open] {
+    display: grid;
+    place-items: center;
+  }
+
+  .lightbox::backdrop {
+    background: rgb(3 4 8 / 0.88);
+    backdrop-filter: blur(4px);
+  }
+
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--radius);
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.6);
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    background: rgb(0 0 0 / 0.4);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  @media (max-width: 1080px) {
+    .post-layout {
+      grid-template-columns: minmax(0, var(--prose));
+    }
+
+    .post-aside {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .post-header {
+      text-align: left;
+    }
+
+    .post-cats {
+      justify-content: flex-start;
+    }
+
+    .lead {
+      margin-left: 0;
+    }
+
+    .pager {
+      grid-template-columns: 1fr;
+    }
+
+    .pager-next {
+      grid-column: 1;
+    }
+
+    .author-card {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  const prose = document.querySelector<HTMLElement>('[data-prose]');
+
+  // Code blocks: language label + copy button
+  const LANG_NAMES: Record<string, string> = {
+    csharp: 'C#',
+    dax: 'DAX',
+    sql: 'SQL',
+    xml: 'XMLA',
+    bat: 'Command line',
+    text: 'Text',
+    plaintext: 'Text',
+  };
+  prose?.querySelectorAll<HTMLPreElement>('pre.astro-code').forEach((pre) => {
+    const lang = pre.dataset.language ?? 'text';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block';
+    const bar = document.createElement('div');
+    bar.className = 'code-block__bar';
+    const label = document.createElement('span');
+    label.textContent = LANG_NAMES[lang] ?? lang;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.setAttribute('aria-label', 'Copy code');
+    const idle = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span>';
+    const done = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Copied</span>';
+    btn.innerHTML = idle;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText.replace(/\n$/, ''));
+        btn.innerHTML = done;
+        btn.setAttribute('data-copied', '');
+        setTimeout(() => {
+          btn.innerHTML = idle;
+          btn.removeAttribute('data-copied');
+        }, 1800);
+      } catch {}
+    });
+    bar.append(label, btn);
+    pre.replaceWith(wrapper);
+    wrapper.append(bar, pre);
+    if (pre.querySelectorAll('.line').length > 40) pre.classList.add('is-long');
+  });
+
+  // Heading anchors
+  prose?.querySelectorAll<HTMLHeadingElement>('h2[id], h3[id], h4[id]').forEach((h) => {
+    const a = document.createElement('a');
+    a.className = 'heading-anchor';
+    a.href = `#${h.id}`;
+    a.textContent = '#';
+    a.setAttribute('aria-label', `Link to section: ${h.textContent}`);
+    h.prepend(a);
+  });
+
+  // Reading progress
+  const bar = document.querySelector<HTMLElement>('[data-progress]');
+  const onScroll = () => {
+    if (!prose || !bar) return;
+    const rect = prose.getBoundingClientRect();
+    const total = rect.height - window.innerHeight * 0.6;
+    const progress = Math.min(1, Math.max(0, -rect.top / Math.max(total, 1)));
+    bar.style.transform = `scaleX(${progress})`;
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Active TOC entry
+  const links = new Map<string, HTMLElement>();
+  document.querySelectorAll<HTMLElement>('[data-toc-link]').forEach((l) => links.set(l.dataset.tocLink!, l));
+  if (links.size && prose) {
+    const headings = [...prose.querySelectorAll<HTMLElement>('h2[id], h3[id]')].filter((h) => links.has(h.id));
+    const setActive = () => {
+      let current = headings[0]?.id;
+      for (const h of headings) {
+        if (h.getBoundingClientRect().top < 140) current = h.id;
+        else break;
+      }
+      links.forEach((l, id) => l.toggleAttribute('data-active', id === current));
+    };
+    setActive();
+    window.addEventListener('scroll', setActive, { passive: true });
+  }
+
+  // Image lightbox
+  const lightbox = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  const lightboxImg = document.querySelector<HTMLImageElement>('[data-lightbox-img]');
+  prose?.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+    if (img.closest('a')) return;
+    img.addEventListener('click', () => {
+      if (!lightbox || !lightboxImg) return;
+      lightboxImg.src = img.currentSrc || img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.showModal();
+    });
+  });
+  lightbox?.addEventListener('click', () => lightbox.close());
+
+  // Copy link
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-link]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copyLink!);
+        btn.setAttribute('data-copied', '');
+        setTimeout(() => btn.removeAttribute('data-copied'), 1800);
+      } catch {}
+    }),
+  );
+</script>

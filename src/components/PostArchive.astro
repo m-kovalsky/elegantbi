@@ -1,0 +1,88 @@
+---
+import PostCard from './PostCard.astro';
+import type { CategoryInfo, Post } from '../utils/posts';
+
+interface Props {
+  posts: Post[];
+  categories: CategoryInfo[];
+  total: number;
+  active?: string;
+}
+
+const { posts, categories, total, active } = Astro.props;
+
+const byYear = new Map<number, Post[]>();
+for (const p of posts) {
+  const y = p.data.pubDate.getUTCFullYear();
+  byYear.set(y, [...(byYear.get(y) ?? []), p]);
+}
+---
+
+<nav class="filters" aria-label="Topics">
+  <a href="/blog" class="chip" aria-current={!active ? 'page' : undefined}>All <span class="count">{total}</span></a>
+  {
+    categories.map((c) => (
+      <a href={`/blog/categories/${c.slug}`} class="chip" aria-current={active === c.slug ? 'page' : undefined}>
+        {c.name} <span class="count">{c.count}</span>
+      </a>
+    ))
+  }
+</nav>
+
+{
+  [...byYear.entries()].map(([year, items], i) => (
+    <section class="year-group" aria-labelledby={`y-${year}`}>
+      <div class="year-head">
+        <h2 id={`y-${year}`}>{year}</h2>
+        <span>
+          {items.length} {items.length === 1 ? 'article' : 'articles'}
+        </span>
+      </div>
+      <div class="post-grid">
+        {items.map((post, j) => (
+          <PostCard post={post} eager={i === 0 && j < 3} />
+        ))}
+      </div>
+    </section>
+  ))
+}
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .year-group {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .year-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .year-head::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    align-self: center;
+  }
+
+  .year-head h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .year-head span {
+    order: 2;
+    color: var(--text-subtle);
+    font-size: 0.85rem;
+  }
+</style>

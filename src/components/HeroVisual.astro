@@ -1,0 +1,273 @@
+---
+// Decorative hero illustration: a DAX "editor" window and a small result chart.
+const bars = [38, 52, 46, 64, 58, 76, 70, 88, 82, 100];
+---
+
+<div class="visual" aria-hidden="true">
+  <div class="window">
+    <div class="window-bar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="file">Revenue YoY %.dax</span>
+      <span class="lang">DAX</span>
+    </div>
+    <pre class="code"><code><span class="ln">1</span><span class="m">Revenue YoY %</span> <span class="op">=</span>
+<span class="ln">2</span><span class="kw">VAR</span> <span class="v">_cur</span> <span class="op">=</span> <span class="ms">[Revenue]</span>
+<span class="ln">3</span><span class="kw">VAR</span> <span class="v">_prev</span> <span class="op">=</span>
+<span class="ln">4</span>    <span class="fn">CALCULATE</span> (
+<span class="ln">5</span>        <span class="ms">[Revenue]</span>,
+<span class="ln">6</span>        <span class="fn">SAMEPERIODLASTYEAR</span> ( <span class="t">'Calendar'</span><span class="ms">[Date]</span> )
+<span class="ln">7</span>    )
+<span class="ln">8</span><span class="kw">RETURN</span>
+<span class="ln">9</span>    <span class="fn">DIVIDE</span> ( <span class="v">_cur</span> <span class="op">-</span> <span class="v">_prev</span>, <span class="v">_prev</span> )</code></pre>
+  </div>
+
+  <div class="chart">
+    <div class="chart-head">
+      <span>Revenue YoY %</span>
+      <strong>+18.4%</strong>
+    </div>
+    <div class="bars">
+      {bars.map((h, i) => <span style={`--h:${h}%;--d:${i * 60}ms`}></span>)}
+    </div>
+  </div>
+
+  <div class="badge">
+    <span class="check">✓</span>
+    <span>
+      <strong>Best Practice Analyzer</strong>
+      <small>0 rule violations</small>
+    </span>
+  </div>
+</div>
+
+<style>
+  .visual {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    margin-left: auto;
+    padding: 1.5rem 0 7.25rem;
+  }
+
+  .window {
+    position: relative;
+    border: 1px solid var(--border-strong);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    box-shadow:
+      0 40px 80px -30px rgb(0 0 0 / 0.65),
+      0 0 0 1px rgb(255 255 255 / 0.02) inset;
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    transform: perspective(1400px) rotateY(-6deg) rotateX(2deg);
+  }
+
+  .window::before {
+    content: '';
+    position: absolute;
+    inset: -40% -20% auto auto;
+    width: 70%;
+    height: 80%;
+    background: radial-gradient(circle, rgb(242 193 78 / 0.18), transparent 65%);
+    pointer-events: none;
+  }
+
+  .window-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font: 500 0.75rem/1 var(--font-mono);
+    color: var(--text-subtle);
+  }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--surface-3);
+  }
+
+  .dots i:first-child {
+    background: #ff5f57;
+  }
+
+  .dots i:nth-child(2) {
+    background: #febc2e;
+  }
+
+  .dots i:nth-child(3) {
+    background: #28c840;
+  }
+
+  .lang {
+    margin-left: auto;
+    padding: 0.2rem 0.45rem;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .code {
+    margin: 0;
+    padding: 1.1rem 1.2rem 1.3rem;
+    overflow: hidden;
+    font: 0.84rem/1.85 var(--font-mono);
+    color: var(--text);
+    white-space: pre;
+  }
+
+  .ln {
+    display: inline-block;
+    width: 1.6rem;
+    color: var(--text-subtle);
+    opacity: 0.55;
+    user-select: none;
+  }
+
+  .m {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .kw {
+    color: #ff7b72;
+  }
+
+  .fn {
+    color: #d2a8ff;
+  }
+
+  .ms {
+    color: #79c0ff;
+  }
+
+  .t {
+    color: #ffa657;
+  }
+
+  .v {
+    color: #f2c14e;
+  }
+
+  .op {
+    color: var(--text-subtle);
+  }
+
+  :global(:root[data-theme='light']) .kw {
+    color: #cf222e;
+  }
+
+  :global(:root[data-theme='light']) .fn {
+    color: #8250df;
+  }
+
+  :global(:root[data-theme='light']) .ms {
+    color: #0550ae;
+  }
+
+  :global(:root[data-theme='light']) .t {
+    color: #953800;
+  }
+
+  :global(:root[data-theme='light']) .v {
+    color: #9a6700;
+  }
+
+  .chart {
+    position: absolute;
+    left: -2.5rem;
+    bottom: 0;
+    width: 230px;
+    padding: 0.95rem 1rem 1rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--bg-soft) 92%, transparent);
+    box-shadow: 0 24px 50px -20px rgb(0 0 0 / 0.6);
+    backdrop-filter: blur(10px);
+  }
+
+  .chart-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.8rem;
+    font-size: 0.72rem;
+    color: var(--text-subtle);
+  }
+
+  .chart-head strong {
+    color: #4ade80;
+    font-size: 0.85rem;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 64px;
+  }
+
+  .bars span {
+    flex: 1;
+    height: var(--h);
+    border-radius: 4px 4px 2px 2px;
+    background: linear-gradient(to top, color-mix(in srgb, var(--accent) 35%, transparent), var(--accent));
+    transform-origin: bottom;
+    animation: grow 0.9s var(--ease) both;
+    animation-delay: var(--d);
+  }
+
+  .bars span:last-child {
+    background: linear-gradient(to top, color-mix(in srgb, var(--accent-2) 40%, transparent), var(--accent-2));
+  }
+
+  @keyframes grow {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  .badge {
+    position: absolute;
+    right: -1rem;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 0.9rem 0.6rem 0.65rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-soft) 92%, transparent);
+    box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.6);
+    backdrop-filter: blur(10px);
+    font-size: 0.75rem;
+  }
+
+  .badge strong {
+    display: block;
+    font-weight: 600;
+  }
+
+  .badge small {
+    color: var(--text-subtle);
+  }
+
+  .check {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgb(74 222 128 / 0.15);
+    color: #4ade80;
+    font-weight: 700;
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostArchive from '../../../components/PostArchive.astro';
+import { getCategories, getPosts, type CategoryInfo, type Post } from '../../../utils/posts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  const categories = getCategories(posts);
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: {
+      category,
+      categories,
+      total: posts.length,
+      posts: posts.filter((p) => p.data.categories.includes(category.name)),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  category: CategoryInfo;
+  categories: CategoryInfo[];
+  total: number;
+  posts: Post[];
+}
+
+const { category, categories, total, posts } = Astro.props;
+---
+
+<BaseLayout title={category.name} description={`Articles about ${category.name} on Elegant BI.`}>
+  <div class="container">
+    <header class="page-header">
+      <span class="eyebrow">Topic</span>
+      <h1>{category.name}</h1>
+      <p>
+        {posts.length}
+        {posts.length === 1 ? 'article' : 'articles'} tagged {category.name}.
+      </p>
+    </header>
+    <PostArchive posts={posts} categories={categories} total={total} active={category.slug} />
+  </div>
+</BaseLayout>

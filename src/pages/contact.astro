@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon, { type IconName } from '../components/Icon.astro';
+import { SITE } from '../consts';
+
+const channels: { icon: IconName; label: string; value: string; href: string; external?: boolean }[] = [
+  { icon: 'mail', label: 'Email', value: SITE.email, href: `mailto:${SITE.email}?subject=Elegant%20BI%20Inquiry` },
+  { icon: 'linkedin', label: 'LinkedIn', value: 'in/michaelkovalsky', href: SITE.linkedin, external: true },
+  { icon: 'github', label: 'GitHub', value: 'm-kovalsky', href: SITE.github, external: true },
+  { icon: 'rss', label: 'RSS', value: 'Subscribe to new posts', href: '/blog-feed.xml' },
+];
+---
+
+<BaseLayout title="Contact" description="Get in touch with Michael Kovalsky of Elegant BI.">
+  <div class="container narrow">
+    <header class="page-header">
+      <span class="eyebrow">Contact</span>
+      <h1>Let's talk.</h1>
+      <p>Thanks for your interest in Elegant BI. For more information, feel free to get in touch.</p>
+    </header>
+
+    <ul class="channels">
+      {
+        channels.map((c) => (
+          <li>
+            <a href={c.href} class="channel" {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              <span class="channel-icon">
+                <Icon name={c.icon} size={20} />
+              </span>
+              <span class="channel-text">
+                <span class="channel-label">{c.label}</span>
+                <span class="channel-value">{c.value}</span>
+              </span>
+              <Icon name="arrow-right" size={18} class="channel-arrow" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 860px;
+  }
+
+  .channels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .channel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition: border-color 0.25s, transform 0.25s var(--ease), background 0.25s;
+  }
+
+  .channel:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-2px);
+  }
+
+  .channel-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--surface-2);
+    color: var(--accent);
+  }
+
+  .channel-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .channel-label {
+    color: var(--text-subtle);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .channel-value {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .channel :global(.channel-arrow) {
+    margin-left: auto;
+    color: var(--text-subtle);
+    transition: transform 0.2s var(--ease), color 0.2s;
+  }
+
+  .channel:hover :global(.channel-arrow) {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+</style>

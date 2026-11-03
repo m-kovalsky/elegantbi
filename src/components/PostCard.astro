@@ -1,0 +1,206 @@
+---
+import Cover from './Cover.astro';
+import Icon from './Icon.astro';
+import { formatDate, postUrl, readingTime, type Post } from '../utils/posts';
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+  eager?: boolean;
+}
+
+const { post, featured = false, eager = false } = Astro.props;
+const { title, description, pubDate, categories, heroImage, heroAlt } = post.data;
+const minutes = readingTime(post.body);
+---
+
+<article class:list={['card', { 'card--featured': featured }]}>
+  <a href={postUrl(post)} class="card-link" aria-label={title}></a>
+  {
+    heroImage && (
+      <div class="card-media">
+        <Cover
+          src={heroImage}
+          alt={heroAlt ?? ''}
+          widths={featured ? [480, 760, 1100] : [400, 640]}
+          sizes={featured ? '(min-width: 960px) 620px, 100vw' : '(min-width: 1100px) 380px, (min-width: 720px) 50vw, 100vw'}
+          eager={eager}
+        />
+      </div>
+    )
+  }
+  <div class="card-body">
+    {categories.length > 0 && (
+      <div class="card-cats">
+        {categories.slice(0, featured ? 3 : 2).map((c) => <span>{c}</span>)}
+      </div>
+    )}
+    <h3 class="card-title">{title}</h3>
+    <p class="card-desc">{description}</p>
+    <div class="card-meta">
+      <time datetime={pubDate.toISOString()}>{formatDate(pubDate, 'short')}</time>
+      <span class="dot-sep"></span>
+      <span class="read"><Icon name="clock" size={13} /> {minutes} min read</span>
+      {featured && <span class="card-cta">Read article <Icon name="arrow-right" size={15} /></span>}
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--surface) 85%, transparent);
+    overflow: hidden;
+    transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow);
+  }
+
+  .card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+  }
+
+  .card-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-media :global(.cover-fg) {
+    transition: transform 0.6s var(--ease);
+  }
+
+  .card:hover .card-media :global(.cover-fg) {
+    transform: scale(1.04);
+  }
+
+  .card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.25rem 1.35rem 1.35rem;
+  }
+
+  .card-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.9rem;
+    margin-bottom: 0.7rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .card-title {
+    margin: 0 0 0.55rem;
+    font-size: 1.18rem;
+    line-height: 1.3;
+    letter-spacing: -0.018em;
+    transition: color 0.2s;
+  }
+
+  .card:hover .card-title {
+    color: var(--accent-strong);
+  }
+
+  .card-desc {
+    margin: 0 0 1.1rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: auto;
+    color: var(--text-subtle);
+    font-size: 0.83rem;
+  }
+
+  .read {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: auto;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .card--featured {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+  }
+
+  .card--featured .card-media {
+    aspect-ratio: auto;
+    min-height: 380px;
+    border-bottom: 0;
+    border-right: 1px solid var(--border);
+  }
+
+  .card--featured .card-media :global(.cover) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .card--featured .card-body {
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    justify-content: center;
+  }
+
+  .card--featured .card-title {
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.9rem;
+  }
+
+  .card--featured .card-desc {
+    font-size: 1.05rem;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+
+  .card--featured .card-meta {
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .card--featured {
+      grid-template-columns: 1fr;
+    }
+
+    .card--featured .card-media {
+      aspect-ratio: 16 / 9;
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+    }
+  }
+</style>

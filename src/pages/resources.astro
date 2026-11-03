@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const resources = [
+  {
+    name: 'Power BI',
+    kind: 'Blog',
+    href: 'https://powerbi.microsoft.com/en-us/blog/',
+    description: 'The official Power BI blog run by Microsoft.',
+  },
+  {
+    name: 'Tabular Editor',
+    kind: 'Tool',
+    href: 'https://github.com/otykier/TabularEditor/releases',
+    description: 'An open source program which is an excellent tool for developing Tabular models.',
+  },
+  {
+    name: 'Vertipaq Analyzer',
+    kind: 'Tool',
+    href: 'https://www.sqlbi.com/tools/vertipaq-analyzer/',
+    description: 'A tool that allows you to analyze the memory footprint and compression of all objects in your Tabular model.',
+  },
+  {
+    name: 'DAX Guide',
+    kind: 'Site',
+    href: 'https://dax.guide/',
+    description: 'A website that documents all DAX functions and their syntax with examples.',
+  },
+  {
+    name: 'DAX Studio',
+    kind: 'Tool',
+    href: 'https://daxstudio.org/',
+    description: 'A great tool for analyzing DAX queries for performance optimization.',
+  },
+];
+---
+
+<BaseLayout title="Resources" description="Recommended tools, sites and blogs for Power BI, Analysis Services and DAX developers.">
+  <div class="container">
+    <header class="page-header">
+      <span class="eyebrow">Toolbox</span>
+      <h1>Resources</h1>
+      <p>The tools, references and blogs I rely on for building and optimizing tabular models.</p>
+    </header>
+
+    <ul class="resources">
+      {
+        resources.map((r) => (
+          <li>
+            <a href={r.href} target="_blank" rel="noopener noreferrer" class="resource">
+              <div class="resource-top">
+                <span class="kind">{r.kind}</span>
+                <Icon name="external" size={16} class="ext" />
+              </div>
+              <h2>{r.name}</h2>
+              <p>{r.description}</p>
+              <span class="host">{new URL(r.href).hostname.replace(/^www\./, '')}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .resources {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .resource {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .resource:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow);
+  }
+
+  .resource-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .kind {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .resource :global(.ext) {
+    color: var(--text-subtle);
+    transition: color 0.2s, transform 0.2s var(--ease);
+  }
+
+  .resource:hover :global(.ext) {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+
+  h2 {
+    margin: 1.1rem 0 0.5rem;
+    font-size: 1.3rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.97rem;
+  }
+
+  .host {
+    margin-top: auto;
+    color: var(--text-subtle);
+    font: 500 0.8rem/1 var(--font-mono);
+  }
+</style>

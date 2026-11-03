@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../consts';
+---
+
+<BaseLayout title="About" description={`About ${SITE.author} and Elegant BI.`}>
+  <div class="container narrow">
+    <header class="page-header">
+      <span class="eyebrow">About</span>
+      <h1>Hi, I'm {SITE.author}.</h1>
+    </header>
+
+    <div class="about">
+      <div class="portrait" aria-hidden="true">
+        <span>{SITE.authorShort}</span>
+      </div>
+      <div class="prose">
+        <p>
+          My name is Michael Kovalsky and I specialize in business intelligence and analytics with a primary focus on Analysis
+          Services, tabular modeling and DAX. Having architected Microsoft's internal best-in-class data models used by 30,000+
+          people around the world, I have garnered significant experience in this domain. This is an avenue to share techniques
+          for creating elegant, performant and scalable data models.
+        </p>
+        <p>
+          Feel free to connect with me on <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a> or visit
+          my <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a> page.
+        </p>
+        <div class="actions">
+          <a href={SITE.linkedin} class="btn btn-primary" target="_blank" rel="noopener noreferrer"><Icon name="linkedin" size={15} /> Connect on LinkedIn</a>
+          <a href={SITE.github} class="btn" target="_blank" rel="noopener noreferrer"><Icon name="github" size={16} /> GitHub</a>
+          <a href="/contact" class="btn"><Icon name="mail" size={16} /> Get in touch</a>
+        </div>
+        <p class="disclaimer">As a Microsoft employee, all statements and views expressed here are solely mine.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 960px;
+  }
+
+  .about {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: clamp(1.5rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+
+  .portrait {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 30% 20%, rgb(255 255 255 / 0.25), transparent 50%),
+      linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #10131a;
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    box-shadow: var(--shadow);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 2rem 0;
+  }
+
+  .actions .btn {
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .actions .btn-primary {
+    color: var(--accent-ink);
+  }
+
+  .disclaimer {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-subtle);
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 680px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+
+    .portrait {
+      width: 120px;
+      font-size: 2.2rem;
+    }
+  }
+</style>
