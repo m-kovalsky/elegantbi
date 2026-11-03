@@ -4,9 +4,9 @@ import Icon, { type IconName } from '../components/Icon.astro';
 import { SITE } from '../consts';
 
 const channels: { icon: IconName; label: string; value: string; href: string; external?: boolean }[] = [
-  { icon: 'mail', label: 'Email', value: SITE.email, href: `mailto:${SITE.email}?subject=Elegant%20BI%20Inquiry` },
-  { icon: 'linkedin', label: 'LinkedIn', value: 'in/michaelkovalsky', href: SITE.linkedin, external: true },
+  { icon: 'linkedin', label: 'LinkedIn', value: 'Message me on LinkedIn', href: SITE.linkedin, external: true },
   { icon: 'github', label: 'GitHub', value: 'm-kovalsky', href: SITE.github, external: true },
+  { icon: 'message', label: 'Comments', value: 'Ask a question on any article', href: '/blog' },
   { icon: 'rss', label: 'RSS', value: 'Subscribe to new posts', href: '/blog-feed.xml' },
 ];
 ---
@@ -16,7 +16,7 @@ const channels: { icon: IconName; label: string; value: string; href: string; ex
     <header class="page-header">
       <span class="eyebrow">Contact</span>
       <h1>Let's talk.</h1>
-      <p>Thanks for your interest in Elegant BI. For more information, feel free to get in touch.</p>
+      <p>Thanks for your interest in Elegant BI. The best way to reach me is a message on LinkedIn.</p>
     </header>
 
     <ul class="channels">

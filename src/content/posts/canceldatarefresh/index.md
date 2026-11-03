@@ -26,7 +26,7 @@ There are many posts on cancelling the refresh of an Analysis Services model. Th
 
 However, this does not work when cancelling a [Power BI Premium](https://docs.microsoft.com/power-bi/admin/service-premium-what-is) dataset refresh. Running this results in the following error message.
 
-*`The '<pii>`*[*joe@abc.com\</pii*](mailto:mikova@microsoft.com%3c/pii)*`>' user does not have permission to perform a cancel operation.`*
+*`The '<pii>joe@abc.com</pii>' user does not have permission to perform a cancel operation.`*
 
 ## The Solution
 

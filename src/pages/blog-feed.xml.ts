@@ -11,13 +11,14 @@ export async function GET(context: APIContext) {
     description: SITE.description,
     site: context.site!,
     trailingSlash: false,
+    xmlns: { dc: 'http://purl.org/dc/elements/1.1/' },
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
       link: postUrl(post),
       categories: post.data.categories,
-      author: `${SITE.email} (${SITE.author})`,
+      customData: `<dc:creator>${SITE.author}</dc:creator>`,
     })),
     customData: `<language>en-us</language>`,
   });

@@ -7,7 +7,6 @@ export const SITE = {
     'In the not so distant future, companies will be run by a monolithic AI algorithm. Until that time, it is up to us to architect elegant and superlative solutions to empower our company to make the best decisions possible.',
   author: 'Michael Kovalsky',
   authorShort: 'MK',
-  email: 'mk@elegantbi.com',
   linkedin: 'https://www.linkedin.com/in/michaelkovalsky',
   github: 'https://github.com/m-kovalsky',
   locale: 'en-US',

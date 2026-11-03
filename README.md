@@ -164,6 +164,7 @@ Update DNS wherever `elegantbi.com` is managed (Wix's DNS settings if Wix is the
 | AAAA  | `@`   | `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153` |
 
 - Remove the old Wix A/CNAME records for `@` and `www`.
-- **Leave MX/TXT records alone** so email for `mk@elegantbi.com` keeps working.
+- Leave the TXT record (`google-site-verification`) alone; it keeps Google Search Console verified. The MX records
+  point to an expired Google Workspace mailbox and can be removed.
 - Once DNS has propagated and GitHub shows the domain as verified, enable **Enforce HTTPS**.
 - Cancel the Wix premium plan only after the new site is live on the domain.
