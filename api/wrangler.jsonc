@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "elegantbi-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-30",
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "elegantbi-engagement",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "ALLOWED_ORIGINS": "https://www.elegantbi.com,https://elegantbi.com"
+  }
+  // Secrets (set with `npx wrangler secret put <NAME>`; for local dev put them in api/.dev.vars):
+  //   ADMIN_TOKEN       - password for /admin and for replying as the author
+  //   VISITOR_SALT      - random string used to anonymise visitor IPs
+  //   TURNSTILE_SECRET  - enables Cloudflare Turnstile bot checks on comments
+  // For local dev, api/.dev.vars also sets ALLOWED_ORIGINS=http://localhost:4321
+}

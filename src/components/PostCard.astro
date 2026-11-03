@@ -2,6 +2,7 @@
 import Cover from './Cover.astro';
 import Icon from './Icon.astro';
 import { formatDate, postUrl, readingTime, type Post } from '../utils/posts';
+import { compactNumber, legacyEngagement } from '../utils/engagement';
 
 interface Props {
   post: Post;
@@ -12,6 +13,7 @@ interface Props {
 const { post, featured = false, eager = false } = Astro.props;
 const { title, description, pubDate, categories, heroImage, heroAlt } = post.data;
 const minutes = readingTime(post.body);
+const stats = legacyEngagement(post.id);
 ---
 
 <article class:list={['card', { 'card--featured': featured }]}>
@@ -41,6 +43,8 @@ const minutes = readingTime(post.body);
       <time datetime={pubDate.toISOString()}>{formatDate(pubDate, 'short')}</time>
       <span class="dot-sep"></span>
       <span class="read"><Icon name="clock" size={13} /> {minutes} min read</span>
+      <span class="stat" title="Views" data-card-stat="views" data-slug={post.id} data-base={stats.views}><Icon name="eye" size={13} /> <span>{compactNumber(stats.views)}</span><span class="sr-only"> views</span></span>
+      <span class="stat" title="Comments" data-card-stat="comments" data-slug={post.id} data-base={stats.commentCount} hidden={stats.commentCount === 0}><Icon name="message" size={13} /> <span>{stats.commentCount}</span><span class="sr-only" data-noun> {stats.commentCount === 1 ? 'comment' : 'comments'}</span></span>
       {featured && <span class="card-cta">Read article <Icon name="arrow-right" size={15} /></span>}
     </div>
   </div>
@@ -132,6 +136,7 @@ const minutes = readingTime(post.body);
 
   .card-meta {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.6rem;
     margin-top: auto;
@@ -139,7 +144,12 @@ const minutes = readingTime(post.body);
     font-size: 0.83rem;
   }
 
-  .read {
+  .stat[hidden] {
+    display: none;
+  }
+
+  .read,
+  .stat {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -199,8 +209,29 @@ const minutes = readingTime(post.body);
 
     .card--featured .card-media {
       aspect-ratio: 16 / 9;
+      min-height: 0;
       border-right: 0;
       border-bottom: 1px solid var(--border);
     }
   }
 </style>
+
+<script>
+  import { API, api, compactNumber } from '../scripts/engagement';
+
+  const els = document.querySelectorAll<HTMLElement>('[data-card-stat]');
+  if (API && els.length) {
+    api<{ posts: Record<string, { views: number; likes: number; comments: number }> }>('/stats')
+      .then(({ posts }) => {
+        els.forEach((el) => {
+          const live = posts[el.dataset.slug!]?.[el.dataset.cardStat as 'views' | 'comments'] ?? 0;
+          const total = Number(el.dataset.base ?? 0) + live;
+          el.querySelector('span')!.textContent = el.dataset.cardStat === 'views' ? compactNumber(total) : String(total);
+          el.hidden = total === 0;
+          const noun = el.querySelector('[data-noun]');
+          if (noun) noun.textContent = total === 1 ? ' comment' : ' comments';
+        });
+      })
+      .catch(() => {});
+  }
+</script>

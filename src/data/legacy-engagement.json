@@ -1,0 +1,6500 @@
+{
+ "source": "Wix",
+ "exportedAt": "2026-11-03T18:15:55.923Z",
+ "posts": {
+  "advancedfiltering": {
+   "views": 8268,
+   "likes": 5,
+   "comments": [
+    {
+     "id": "b718a8de-0673-48d0-ba0a-57e7b9c9b105",
+     "author": "jasperstarrenburg",
+     "isAuthor": false,
+     "date": "2022-08-26T14:18:13.742Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This helps me a great deal! However, there is one question for me left unanswered:"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Sometimes I see a translated column/measure in Power BI, and I want to look it up in Tabular Editor. Often, it is hard to find the original, untranslated column, so I am trying to search through translated names with Dynamic LINQ. However, I have difficulty in finding the right function. I have an idea I have to use ObjectTranslation, but I cannot seem to get the function right (unfortunately I don't have experience with API programming).  "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Could you provide a function how to search through translations?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Kind Regards,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Jasper"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "6177c79a-3a79-4ca0-980d-2f50536365f4",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-08-28T06:50:06.578Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Jasper,"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You can use this code in the C# script window. Just fill in the parameter with the translated column name."
+          }
+         ]
+        },
+        {
+         "t": "code",
+         "text": "string trcolName = \"\";\nforeach (var c in Model.AllColumns.Where(a => a.TranslatedNames.Any(b => b == trcolName)))\n{\n    string tableName = c.Table.Name;\n    Model.Tables[tableName].Columns[c.Name].DaxObjectFullName.Output();\n}"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "autoaggs": {
+   "views": 3766,
+   "likes": 7,
+   "comments": []
+  },
+  "bestpracticerulesavings": {
+   "views": 7103,
+   "likes": 8,
+   "comments": []
+  },
+  "canceldatarefresh": {
+   "views": 30150,
+   "likes": 6,
+   "comments": [
+    {
+     "id": "924a021a-eee1-4200-bef0-712d89276ff3",
+     "author": "Tomáš Gryžboň",
+     "isAuthor": false,
+     "date": "2021-08-26T11:29:46.363Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hello,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I followed the article as I was also getting the \""
+        },
+        {
+         "text": "user does not have permission to perform a cancel operation",
+         "i": true
+        },
+        {
+         "text": "\", however once I terminated the session it got recreated in a moment with a new session ID and the output statement of XMLA was \"Error -1052311437: We had to move the session with ID 'XXXX' to another Power BI Premium node. Moving the session temporarily interrupted this trace - tracing will resume automatically as soon as the session has been fully moved to the new node.\" "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Do you have any idea how to get rid of the session without any recreation?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "a7d23d72-11df-4bc8-8e4d-c02246a32b7b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-26T15:33:34.779Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I believe this happens only with Power BI Premium. Try it again after the new node has been established. Also make sure you are an admin on the dataset - otherwise you won’t be able to run these commands (related to the permission issue)."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "425fe0c8-3f58-4096-a3c8-6d1f59d09c71",
+       "author": "Tomáš Gryžboň",
+       "isAuthor": false,
+       "date": "2021-09-13T07:57:27.422Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Issue was in the end the fact that I was trying to execute the Cancel statement on the level of server (workspace) and not on the level of Dataset, thank you for a great article and help"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "canceldatarefreshado": {
+   "views": 2663,
+   "likes": 2,
+   "comments": [
+    {
+     "id": "2d3872cf-d571-4b3b-a37e-636bb316135f",
+     "author": "Jay Munnangi",
+     "isAuthor": false,
+     "date": "2021-09-24T12:39:59.338Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hello will this code be able to kill the datasets using gateway for refresh?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "5fea079a-940e-4c2d-a9cb-325b1f0b136a",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-09-26T07:24:29.584Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Jay, it will cancel any dataset refresh (unless XMLA R/W is not enabled). If the dataset requires a gateway and the gateway is properly set up, this will work."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "canceldatarefreshte": {
+   "views": 4974,
+   "likes": 2,
+   "comments": [
+    {
+     "id": "dd343247-3f9d-4f93-8c17-d5b0c33130d6",
+     "author": "Stephen Maguire",
+     "isAuthor": false,
+     "date": "2021-04-22T08:13:18.863Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I love this SOOO much! But have get the 'user does not have permission' error when trying to do this against PBI Premium. I've even tried explicitly defining the cancelAssociated as false in the CancelSession method. Odd thing is it works when issuing the xml via SSMS as per your prior blog post. Any ideas?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "ef513e9a-1ff2-4fda-b4c7-96d8e67eb2e2",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-04-22T08:19:58.810Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Glad to hear, Stephen!"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "Make sure you have the Service Principal set up properly (with Tenant access). Since you’re getting a permission error it leads me to believe that is the issue."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "3b0decb2-b7aa-4d24-bb6c-92c9a14bb475",
+       "author": "Pablo Mancini",
+       "isAuthor": false,
+       "date": "2021-09-07T04:44:00.293Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Awesome! But how can I configure the main service? (With tenant access). The link doesn't work."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "24cd9354-c4d9-4199-91f6-2fc812f9774c",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-09-20T06:02:41.328Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I’ve updated the link for setting up the service principal."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "41664e66-4278-4bd2-a2fd-b835a56f595e",
+     "author": "analyticsBI",
+     "isAuthor": false,
+     "date": "2022-01-25T10:24:58.876Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi - really appreciate you putting this together. I too am getting the permission error (same as Stephen) - the link to the Service Principal set up is not working for me either. Could you update it again?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "8fb0651d-fb3b-4215-8dc3-99fd3f2d20e0",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-01-25T14:23:25.045Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi, this has been updated. Many links to Tabular Editor’s documentation have changed since Tabular Editor 3 launched, causing old links to break."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "3a4d59db-c5df-4ec5-99c6-431d1b7a5b68",
+     "author": "Mo Da",
+     "isAuthor": false,
+     "date": "2022-03-17T12:37:14.584Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great Post and thanks a lot - it worked out great. "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I would have a question: "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Which other ways do you have to trigger a refresh besides the PowerBI Service or the PowerBI RestAPI ? "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I just realized, that the PBI Service does  retry 5 times. "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "If I would trigger the refresh via TabularEditor or SSMS I could cancel that in the tool itself - same with the SQLcmds ? "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Or am I mixing up something ? "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Thanks  a lot! "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "1038faf1-5cf4-4086-b1dd-2ee4c48aed3f",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-03-17T15:09:40.653Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "See my post about triggering a refresh from Tabular Editor (can also be triggered using the r command line, so can be done from Azure DevOps etc). If you trigger a refresh in SSMS or tabular editor you can cancel it within the same tool. However, if you trigger the refresh programmatically, then this series of posts shows (imo) the best way to cancel a refresh."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "4fa9b7a7-d528-4e49-a098-a5e616d92636",
+     "author": "Chris Allen",
+     "isAuthor": false,
+     "date": "2022-03-18T18:03:46.631Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I'm also getting the 'user does not have permission' error when trying to do this against PPU. I've confirmed XMLA read/write is enabled and my service principal has Tenant.read/write. Once item I did notice when looking at script is that Intellisense can't find the CancelSession function (Model.Database.TOMDatabase.Server.CancelSession(sID). I'm running tabular editor version 2.16.2. Is there something else I'm missing?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks!"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "f09386e1-67ea-427f-802c-1c9121b71fcc",
+       "author": "Dan B",
+       "isAuthor": false,
+       "date": "2022-03-31T17:49:51.720Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Same here.  And I have every admin right possible in M365."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "columnmeasurereference": {
+   "views": 4801,
+   "likes": 6,
+   "comments": [
+    {
+     "id": "24ba20ff-b109-4567-932a-7e149b919e99",
+     "author": "Jared Fallt",
+     "isAuthor": false,
+     "date": "2020-02-06T13:34:26.822Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "this is mind blowing, loving the blog!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "convertdatasources": {
+   "views": 3751,
+   "likes": 4,
+   "comments": [
+    {
+     "id": "49103ae6-37ab-41e2-b712-dcd3048eb39b",
+     "author": "Alex Powers",
+     "isAuthor": false,
+     "date": "2021-07-26T17:08:07.422Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great write-up! Adding this to my custom scripts ASAP."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "f5665495-14a1-4fcd-949c-32e8ce8a1ae3",
+     "author": "robin.neven",
+     "isAuthor": false,
+     "date": "2022-03-03T11:32:50.399Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I believe this to be the solution to my problem, but I'm getting the following error when trying to run the script in Tabular Editor. Could you please help out here? Thanks!"
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "\"Error on line 27"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "NullReferenceException"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Object reference not set to an instance of an object.\""
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "fa03ffa6-6f18-482d-95c6-b814191f6c29",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-03-18T08:00:27.765Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "This script and solution in this post is only for models with structured data sources and where the partitions use regular SQL (and not M-code). Given that the tabular editor post you mentioned worked for you, your partitions use M-code (which means that the solution in this post will not be relevant to you)."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "9361e2fe-37c7-4572-9094-cac742aab863",
+     "author": "robin.neven",
+     "isAuthor": false,
+     "date": "2022-03-08T15:43:57.648Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "UPDATE: if I try to manually do what the C# script does, i.e. create a 'provider' type version of the 'structured' type data source that I have now (an ODBC connection to Snowflake), I basically get the same error: \"The action failed with the following error: Object reference not set to an instance of an object.\""
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "But I did manage to create it and convert all tables to the provider version of the data source and deploy to Power BI Premium with the following instructions:"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "https://tabulareditor.github.io/2019/07/03/TabularEditorTricks2.html"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "But unfortunately, my initial problem ('Data source credentials' in Dataset settings staying greyed out, due to which I cannot refresh the migrated Dataset), is not solved. I'm starting to think that it's maybe an issue specific to my company (e.g. network settings). But any help is still welcome!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "3b593f56-817a-4717-b950-ad8f63195117",
+     "author": "Alberto Gentilcore",
+     "isAuthor": false,
+     "date": "2023-03-16T14:52:58.988Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, I was reading your post and I couldn't understand it the need of change."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "For example, in the Microsoft documentation, they say: \"With the XMLA endpoint, Premium also supports structured and provider data sources\""
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "So, if they supports Structured and Provider, why do we need changes the data source?"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "c9599989-ca29-4144-a6ff-15d793ef6e6c",
+     "author": "Richard Hains",
+     "isAuthor": false,
+     "date": "2023-09-30T05:29:02.052Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi MK, we were able to migrate our SSAS tabular models to premium per user following your article. However, when the data source is a tabular model in premium I tried to recreate the connection sting using system.data.msolap8 then deploy the model to premium but when setting the gateway the data source is not recognized. Any idea what I am doing wrong?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "if you read this and can send me an email to "
+        },
+        {
+         "text": "rhains@capitalpower.com",
+         "href": "rhains@capitalpower.com"
+        },
+        {
+         "text": "  I will appreciate  "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Richard"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "covid-19-report": {
+   "views": 908,
+   "likes": 2,
+   "comments": [
+    {
+     "id": "571cf023-952a-4ec3-afde-2a974ed54cf7",
+     "author": "mike.westaway",
+     "isAuthor": false,
+     "date": "2020-04-29T10:13:39.096Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Very helpful viz thanks. I wonder if adding population density would be interesting "
+        },
+        {
+         "text": "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population_density",
+         "href": "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population_density"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "cdfc8f4b-096b-4d55-9e91-74cf1471cefb",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2020-05-01T06:40:21.954Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I added population density (by country and US state). You can see it on pages 5 and 6."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "datadiagram": {
+   "views": 1583,
+   "likes": 5,
+   "comments": []
+  },
+  "datadictionary": {
+   "views": 10053,
+   "likes": 12,
+   "comments": [
+    {
+     "id": "fcdf2e2c-67ce-4b9a-a864-33e6ddb9ec86",
+     "author": "Mihai",
+     "isAuthor": false,
+     "date": "2021-04-20T21:02:05.600Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Awesome approach, and thanks for the scripts, I was thinking about something like the trick with bulk importing Descriptions, but for the actual Measures syntax. Never got to actually implement that, now I will just shamelessly \"borrow\" the code and adjust for my needs. 😎"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "bbab2f98-0d42-44db-9df0-371e7069055c",
+     "author": "Martin de la Herran",
+     "isAuthor": false,
+     "date": "2021-04-20T22:50:37.327Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great content, thanks for sharing!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "ed45f052-9bf2-476c-b770-f304bcb57886",
+     "author": "Vijayaragavan Krishnamoorthy",
+     "isAuthor": false,
+     "date": "2022-07-08T15:25:34.842Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Is this can be done with DMV from DAXSTUDIO now ?"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "datadictionaryexcel": {
+   "views": 5827,
+   "likes": 6,
+   "comments": [
+    {
+     "id": "a8199a22-fc14-4d0f-a07d-e8e75cfd92f4",
+     "author": "Just Thorning Blindbæk",
+     "isAuthor": false,
+     "date": "2021-12-22T11:32:52.630Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I had some trouble with special danish characters in the export, but figured out I could change line 264 where the Workbooks.OpenText has a long range of parameters. The second one is \"Origin\" that can either be set to a constant of 1, 2, 3 or to the specific codepage. I sat it to 65001 and it's working."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Might be useful to others."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "2633ed09-6625-4da5-a023-4d1530b6f14a",
+     "author": "Garrett Fox",
+     "isAuthor": false,
+     "date": "2022-04-29T11:01:50.947Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael, my dataset is inside of Power BI Premium workspace, but my organization has not turned on XMLA read-write and is hesitating to turn it on for some reason. Is there a way to run a script to create an Automated Data Dictionary in an Excel file without needing XMLA read-write? This would make my life much easier."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "7bedd96e-238d-4c60-bb5d-220ef0e1ca18",
+       "author": "Garrett Fox",
+       "isAuthor": false,
+       "date": "2022-04-29T11:04:09.330Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "There also appear to be downsides to editing a dataset using XMLA read-write because then you are not allowed to download that dataset from the workspace as a .pbix file anymore. Just one more reason why I would like to export a Data Dictionary to Excel without needing to resort to XMLA read-write.."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "datadictionaryreinvented": {
+   "views": 5484,
+   "likes": 7,
+   "comments": [
+    {
+     "id": "aeeacad9-09ad-4423-9795-b0485c8f8285",
+     "author": "Ulrik Møller",
+     "isAuthor": false,
+     "date": "2021-04-14T10:19:35.300Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This is excellent, been looking for an approach like this!"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Would a similar approach be possible where the metadata is written to a calculated table in the model using the "
+        },
+        {
+         "text": "DATATABLE",
+         "href": "https://dax.guide/datatable/"
+        },
+        {
+         "text": " syntax?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "That would enable us to use this for our models that don't use a SQL Server."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "50eb7132-5ce0-4a3a-86e7-4e5edbc7e355",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-04-14T10:55:39.497Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Ulrik, interesting point! Yes, that is possible. The only issue is that the calculated table would be extremely verbose so I’m not sure I recommend that path. That being said it would be generated dynamically in a similar manner."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "89f39b17-228d-46b1-9e88-ad34b16e0f49",
+     "author": "Ben Arendse",
+     "isAuthor": false,
+     "date": "2021-04-19T13:57:05.327Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Is it possible to create a data dictionary based on its own? So add datasource (the analyse services) in the model. And use a DMV statement to extract the tables, columns and so on."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "This way you dont need to add it to the datawarehouse and you always have the updated data. Kind regards,"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Benito2313"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": " "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "a83121a6-4ac3-43b0-b0e0-b7bd24555c7f",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-04-19T14:04:04.743Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Ben,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "You should check out my earlier post on automating the data dictionary using DMVs. I considered the method you mentioned however there is a problem: DMVs cannot be easily joined together. That is why I used SQL to join DMVs in that blog post (and why I jettisoned the use of DMVs altogether in this post)."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "81fc4650-27ef-425f-a0b3-e5c11fe650f5",
+       "author": "Ben Arendse",
+       "isAuthor": false,
+       "date": "2021-04-19T14:28:59.674Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi,"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I have checked the other blog. And i didn't found what i was looking for."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "What i mean is too not use ssms."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I want to just use tabular editor to connect to a model and in that model connect to the same model and use the dmv statements to extract the tables and columns data."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Kind regards,"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "352150dd-b6a0-4664-8b86-49be0dc9d4bf",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-04-19T14:46:17.330Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "The other post is simply to see the implementation of DMVs. As mentioned before, using DMVs without SQL is not really feasible due to the inability to join them. That being said there are other options for creating the data dictionary while avoiding the data warehouse."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "b745b06f-e4ed-43e3-9f95-49702d16db95",
+       "author": "Ben Arendse",
+       "isAuthor": false,
+       "date": "2021-04-19T15:52:01.408Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Ah you are ."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Could you point me in the right direction."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Kind regards,"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Ben"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "9eff6a4a-dd62-4883-9d0e-cf283c6d23a9",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-04-19T16:43:33.629Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Can output the metadata to an Excel file and then connect it to the model. Will make a post on this."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bdefa15b-4577-42ed-ba64-d854e6d23d5b",
+     "author": "Ben Arendse",
+     "isAuthor": false,
+     "date": "2021-05-30T12:21:50.060Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Micheal,"
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks for your great posts, they're really appreciated 😁."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "You created a automated data dictionary in a DWH and in Excel, now i have found another way to do it and what it solves is that you dont need an external source to store the data."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I would like to share it with you, how can i do this ?"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Kind regards,"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Benito2313"
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "82c7b73b-6222-4c64-82bd-b6371bef9901",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-05-30T14:22:44.015Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Ben,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "Glad to hear! Feel free to share it on GitHub - saw you opened an issue, probably about this same topic."
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "Best,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "Michael"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "61142590-3eac-46fd-a76a-6010ae40006c",
+       "author": "Ben Arendse",
+       "isAuthor": false,
+       "date": "2021-05-30T14:32:58.908Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Micheal,"
+          },
+          {
+           "text": "\n"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Yes i did, but then i found out what i needed to do to get it working :)"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "I will share it on GitHub :)"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Kind regards,"
+          },
+          {
+           "text": "\n"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Ben"
+          },
+          {
+           "text": "\n"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "6d50551b-9737-433a-bf3f-490f584f93d4",
+     "author": "Frans Moolenaar",
+     "isAuthor": false,
+     "date": "2022-04-05T14:49:22.076Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Using Tabular editor 3.2.2 I get an error Incorrect syntax near ',' on line 250 which is "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "cmdInsert.ExecuteNonQuery();"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Any idea how I can make this working?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thx,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Frans"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "datapreview": {
+   "views": 4675,
+   "likes": 8,
+   "comments": [
+    {
+     "id": "1925b030-a502-45a7-9a4e-9187c823adaf",
+     "author": "Kamil Kaleciński",
+     "isAuthor": false,
+     "date": "2021-05-27T14:35:59.794Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Many thanks, Michael! I was just another SSDT user that missed it in Tabular Editor, but not anymore!  Just please make a small correction in Selected Table part as Selected.Table formula misses additional .Name attribute to work the same as hardcoded version. Thanks again!"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "ee3a87db-a218-49a4-9a59-fbd98de22275",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-05-27T14:55:19.802Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Ah thanks for catching that. All fixed! Glad to hear you’ve joined the Tabular Editor community!"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "datarefreshintabulareditor": {
+   "views": 19931,
+   "likes": 7,
+   "comments": [
+    {
+     "id": "49113fc6-8d13-42df-b2d2-035493511c05",
+     "author": "Stephen Maguire",
+     "isAuthor": false,
+     "date": "2021-04-11T00:20:18.588Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I can't wait for the new tool!"
+        }
+       ]
+      },
+      {
+       "t": "gif",
+       "src": "https://media4.giphy.com/media/NT239BZIrr2W3TdSin/giphy.gif?cid=511e7ad3cldr4bijeqhief4b0tale6trgyseecz9vhccfra7&rid=giphy.gif"
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "4406648b-421b-421d-974f-bcd44744e6f0",
+     "author": "Garrett Fox",
+     "isAuthor": false,
+     "date": "2023-06-05T13:41:50.162Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "What is the advantage of running this C# Script to refresh multiple tables in Tabular Editor, versus just using the UI, holding down Control, selecting the multiple tables, and then right clicking and selecting Refresh > Refresh type?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "c43ef987-26f3-462a-a3bb-d2ec5f63807a",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2023-06-05T15:48:19.427Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You can do that as well. If you don’t have tabular editor 3, this enables you to refresh tables etc in TE."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "f88be2af-3ba1-4f72-b1d8-6d75f0627dd2",
+     "author": "Rafael Barbosa",
+     "isAuthor": false,
+     "date": "2024-05-05T01:18:47.484Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I liked this solution. Unify 3 scripts, select the tables so the partitions are executed in series, always saving the changes for each partition plus a 1 second delay before starting the next partition and at the end RefreshType.Calculate and saving the changes again and send the success message."
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I will test with large models, but it is working to fully load tables with incremental updates."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "daxquerylanguage": {
+   "views": 12449,
+   "likes": 5,
+   "comments": [
+    {
+     "id": "903bc906-d459-4d3e-a318-b12cce39ebca",
+     "author": "Juan Robles",
+     "isAuthor": false,
+     "date": "2022-02-04T19:06:43.886Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great Summary...how to add switch to a summarize column structure...basically dont want all the rows on an additional columns (same as case when in SQL)"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "333c13b8-784e-427e-be8b-033b797c7d7c",
+     "author": "Aaron Rodriguez",
+     "isAuthor": false,
+     "date": "2022-12-03T14:38:58.441Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Can you add a few variables in your DAX query to show how they could be incorporated?"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "defaultfilters": {
+   "views": 897,
+   "likes": 1,
+   "comments": []
+  },
+  "descriptions": {
+   "views": 10129,
+   "likes": 6,
+   "comments": [
+    {
+     "id": "5173aaba-f690-4ea0-958a-41179159e938",
+     "author": "Ron van der Poel",
+     "isAuthor": false,
+     "date": "2021-05-04T10:24:27.534Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, I used the export and import script. Worked fine. The only thing is that every time I open the PBIX Power BI keeps on asking me if I want to apply the changes. I already applied them more than once, but keeps on asking. Any idea?"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "regards"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Ron"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "b9814e24-cea3-4ae1-98bb-2b3ba32fc59a",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-05-04T10:56:44.166Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "This warning is provided by Tabular Editor as a note of caution since only a limited set of operations are supported when using External Tools with Power BI Desktop. There is no way to turn off this warning."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "e8df45c9-1165-4edd-a85c-fa6d4957dee3",
+       "author": "Ron van der Poel",
+       "isAuthor": false,
+       "date": "2021-05-04T11:01:24.084Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Does it harm? "
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "d6beb48a-c086-471c-bbde-a29f62b92bd0",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-05-04T11:29:32.926Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Descriptions should be fine as modifying them does not change the structure of the model. However, make sure to take a backup of the .pbix just in case."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a718ffd3-8368-459d-b250-8994cf24cab4",
+     "author": "x37",
+     "isAuthor": false,
+     "date": "2021-06-22T08:22:53.302Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hello,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thank you for the scripts."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Would it be possible to add an import/export for translations as well ?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Although I am not 100% sure how they can be seen in the model or web (except from within Tabular Editor)."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks!"
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "475a62b0-35a9-48f9-98de-4a853a02a8d3",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-06-22T08:46:14.945Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I have scripts for import/export of translations on GitHub. MetadataExport, MetadataImport_Translations"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "https://github.com/m-kovalsky/Tabular"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "4a5f255d-0a05-46fa-9ef1-87c75fd58764",
+     "author": "Ken Loewen",
+     "isAuthor": false,
+     "date": "2022-01-13T21:13:28.607Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I really like your import & export scripts. One thing that popped right up is that I've got a couple of <cr><lf> in one of my descriptions and the export script threw the new lines of text to column A in the next row rather than keeping it in the same cell. I would have the same situation in nearly all of my DAX measures as well as some measures that have a TAB character in them. "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "When I export my measures to TSV, the <cr><lf> comes across as \\n and the tab as \\t. That successfully imports to Excel and I'm then able to find/replace them. These are manual steps for me now but the sort of thing I hope to automate."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "c85ec655-62d8-4482-b88c-a950860dfd7b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-01-31T17:07:40.939Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Ken, it’s not exactly a best practice to have tabs and new lines within descriptions. I would recommend removing these. It can be easily accomplished with the REPLACE function in c#. If you really want the \\n & \\t to show you can use the replace function to replace such indents with those values."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bd0a616e-e360-4af1-a819-0aed71ae8dfb",
+     "author": "Garrett Fox",
+     "isAuthor": false,
+     "date": "2022-01-31T16:37:30.725Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael, I am a HUGE fan of yours! For my report builders, the best description for a measure is really just the DAX code itself. Is there an automated way to make sure that the measure descriptions that the report builder sees when hovering over a measure is DAX code itself? Thanks, Garrett"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "19e0f91c-7e9d-4ede-933a-d7edf8fcf510",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-01-31T17:15:50.117Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Garrett, you can accomplish this by running the following code in Tabular Editor’s advanced scripting window:"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "foreach (var m in Model.AllMeasures.ToList())"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "{"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "    m.Description = m.Expression;"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "}"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "You can expand this to calculated columns as well if you like with a bit more c#."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "9768a054-d9b2-4ca4-92c1-c686424ba80f",
+     "author": "Berbouze",
+     "isAuthor": false,
+     "date": "2022-02-19T12:51:16.687Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi guys, quite new here so question might be stupid or I might be doing something wrong."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "But whenever I try and update the description from Tabular Editor to my PBI Desktop, after I apply changes in PBI Desktop, Tables and Columns description are reset to their old value in PBI Desktop. Measures description is pushed however. Any idea why ?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "1e71286b-9665-48da-a66a-4c5b3df64b0d",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-02-19T19:39:36.143Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi, you must update the following setting in Tabular Editor:"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "File->Preferences->Allow unsupported Power BI changes (make sure this is checked)."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "38271717-3bcf-43c2-a71a-b493fddc8267",
+       "author": "Berbouze",
+       "isAuthor": false,
+       "date": "2022-02-19T23:08:04.188Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Thanks for the reply Michael, however, it didn't quite fix the issue for me. I've tried playing with pretty much all the preferences options but couldn't get the tables/columns descriptions to update in PBI Desktop (I do see the new description temporarily, but after applying changes it reverts back to the previous PBI Desktop description)."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a201bd53-fec7-4b46-958a-4b84c1c55fe8",
+       "author": "olivierlenard",
+       "isAuthor": false,
+       "date": "2023-02-21T09:08:23.580Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Same for me Berbouze. Don't get the rootcause. Did you fix it by the time"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "48c936c9-ac39-4934-836c-1dead248dbf9",
+     "author": "Bernat Agulló",
+     "isAuthor": false,
+     "date": "2022-03-13T21:57:22.889Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Once you have the descriptions, why not bring them into the report, as tooltips for instance -- here I suggest a way of doing it https://www.esbrina-ba.com/showing-measure-descriptions-in-tooltips/"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "89b7be5c-e62f-4713-b7e4-876012d06c40",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-03-13T22:42:24.811Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Bernat, yes you can certainly do that. However you want to surface the descriptions is your choice. However, I would caution adding descriptions as tooltips to all your objects in visuals as it would create an overhead for performance. That is why I prefer a single data dictionary page (organized as not to interfere with the other report pages)."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bd938fd5-ca9d-4f32-bec4-e55f9aae49b1",
+     "author": "Lucas",
+     "isAuthor": false,
+     "date": "2022-05-04T18:35:07.140Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Anyone have feedback on why I am getting an error message when I try to run this script in Tabular Editor. I am getting an \"Unable to Cast\" error message that I will type in below for reference. I am VERY new to this so apologize ahead of time for my lack of knowledge. "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Error on line 129"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "InvalidCastException"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Unable to cast COM object of type"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "'Microsoft.Office.Interop.Excel.ApplicationClass' to interface"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "type 'Microsoft.Office.Interop.Excel._Application'. This"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "operation failed because the QueryInterface call on the COM component for the interface with IID"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "'{000208D5-0000-0000-C000-000000000046}' failed due to the "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "following error: Error loading type library/DLL. (Exception"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "from HRESULT: 0x80029C4A (TYPE_E_CANTLOADLIBRARY))."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "9387730e-a6e5-465a-aa3e-9fbcb07ba0d0",
+     "author": "Bernat Agulló",
+     "isAuthor": false,
+     "date": "2022-09-17T15:27:47.734Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I've seen that the descriptions might not be inmediately visible in PBID. But if you save and reopen the file they should be there. They were for me!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "0ef7b0fe-085b-4300-824d-001fc940313f",
+     "author": "niall.dillon",
+     "isAuthor": false,
+     "date": "2022-11-16T05:56:43.333Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This is a really good solution for documentation.  For us the ideal solution would be PBI could read the Description (Extended Properties) value directly from SQL Server but with that not available this is a very good alternative.  I've got this solution mostly working, the Column Descriptions all update as expected but the Table Descriptions initially update but on saving the dataset they disappear.  I've set File->Preferences->Allow unsupported but this has not made any difference.  It's not a huge issue as I can manually enter the Table Descriptions as there are not that many, just curious as to why Column Descriptions are updating but Table Descriptions are not."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Niall"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "f8bd29eb-9888-47cd-a3cb-4333d80df6c8",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-11-25T08:55:10.831Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Are you saving this back to a Power BI Desktop file? I just tested this and it works just fine for both the column and table descriptions (as long as you have that preference set in Tabular Editor). Make sure the only thing you modify in the Excel file is the description column. And that you first use the export script to generate the Excel file."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "38144642-3e1a-4f56-9c22-dce19a3a3249",
+       "author": "Johnny W",
+       "isAuthor": false,
+       "date": "2022-12-10T07:49:58.121Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Darren Gosbell has a script that can read SQL Server extended properties and do exactly that"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "https://gist.github.com/dgosbell/477c021035b206c97b26ea28db1550ee"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "273c0790-ec14-4e37-8d4c-b02f2483fc03",
+     "author": "Kyle",
+     "isAuthor": false,
+     "date": "2023-09-08T06:34:59.365Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hey guys I was having issues with measure descriptions that contain newlines. The export would have the descriptions containing newlines spread out across multiple rows - meaning the export format no longer worked on the import step."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I've created a fork of the ExportDescriptions.cs file which resolves the issue by replacing the newlines with a placeholder string before they are appended to the excel file. You can then use these placeholders to quickly re-insert the newlines in excel before you import."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "https://github.com/Kyle-Ross/Tabular/blob/master/Descriptions/ExportDescriptions-NewLineRemover"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Thanks to the author and let me know if you find an easier way of dealing with this issue!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "c3a48bf8-7408-4de8-896a-532085766f69",
+     "author": "bilalzeine23",
+     "isAuthor": false,
+     "date": "2024-01-11T06:22:14.497Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hey guys. Ive tried to export using tabular editor, however i keep getting an error on line 119 - DirectoryNotFoundException Could not find a part of the path 'C:/Desktop/Descriptions.txt'. how can i fix this?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "4fad7586-04de-4ffa-8106-7df0874fd0c5",
+       "author": "Bernat Agulló",
+       "isAuthor": false,
+       "date": "2024-01-11T08:27:00.501Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Does the folder exist? "
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "feel free to bring the question to reddit "
+          },
+          {
+           "text": "https://www.reddit.com/r/TE_CSharp/",
+           "href": "https://www.reddit.com/r/TE_CSharp/"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "06de0d77-ace3-40f9-b261-1d24a7ee2518",
+       "author": "Syed Shah",
+       "isAuthor": false,
+       "date": "2025-02-10T19:08:02.993Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Solution:"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "Replace C:\\Desktop with the actual path to your desktop (e.g., C:\\Users\\<YourUsername>\\Desktop)."
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "shahhaider902@gmail.com",
+           "href": "mailto:shahhaider902@gmail.com"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "https://w",
+           "href": "https://w.linkedin.com/in/syed-haider-ali-shah"
+          },
+          {
+           "text": "ww",
+           "href": "https://w.linkedin.com/in/syed-haider-ali-shah"
+          },
+          {
+           "text": ".linkedin.com/in/syed-haider-ali-shah",
+           "href": "https://w.linkedin.com/in/syed-haider-ali-shah"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "f22c856a-59d9-407d-af89-4fb68bfe1646",
+     "author": "Syed Shah",
+     "isAuthor": false,
+     "date": "2025-02-11T13:09:33.513Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Fixed Description to new lines issue:"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "https://github.com/peloscvcd/Tabular/commit/4de95b6a7b23cc9757713264e3aed27551fdf460?diff=unified&w=1",
+         "href": "https://github.com/peloscvcd/Tabular/commit/4de95b6a7b23cc9757713264e3aed27551fdf460?diff=unified&w=1"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "direct-lake-migration": {
+   "views": 9827,
+   "likes": 11,
+   "comments": [
+    {
+     "id": "00b58c34-9c89-4970-9307-140b49858480",
+     "author": "ananthkrishna99",
+     "isAuthor": false,
+     "date": "2024-04-13T21:55:55.926Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi "
+        },
+        {
+         "text": "@Michael Kovalsky"
+        },
+        {
+         "text": ","
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "while importing calculated tables from Import model to Lakehouse using \"migrate_calc_tables_to_lakehouse\" function, if there are Auto date tables present in the model, then we are facing error, can we exclude migrating this type of tables."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "cff109cb-9900-4a07-b978-c2d3d9d0fb9f",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2024-04-14T06:34:45.656Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi, please raise this as an issue on GitHub."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "791593e1-ac44-41b4-9dd5-1c0d538e760d",
+     "author": "Trang Thi My Nguyen",
+     "isAuthor": false,
+     "date": "2024-09-25T07:35:49.376Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "We started our Power BI since 2016 and alot of our tables have columns with binary data type and also DateTime data type due to ERP system."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Do you have any recommendation how to deal with this for migration without mass changes to our original semantic models."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks, Trang "
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "bc4e8152-e190-4a60-b208-69f7f80db31d",
+     "author": "Trang Thi My Nguyen",
+     "isAuthor": false,
+     "date": "2024-09-25T07:36:25.865Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "We started our Power BI since 2016 and alot of our tables have columns with binary data type and also DateTime data type due to ERP system."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Do you have any recommendation how to deal with this for migration without mass changes to our original semantic models."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Truly appreciate this.  Trang "
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "f5889d03-3838-40f3-90bb-e986a7a5d0c7",
+     "author": "Ravi Rao",
+     "isAuthor": false,
+     "date": "2025-02-04T11:58:20.542Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks for this wonderful utility, really useful."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "However, I am having difficulty while running this due to Lakehouse (with schema) and getting error as  \""
+        },
+        {
+         "text": "\"message\":\"The operation is not supported for Lakehouse with schemas enabled.\"}\" --> is there any solution or workaround other than changing the lakehouse to without schema option? "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Also, is it possible to use Warehouse to run this utility instead of Lakehouse? "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Appreciate your guidance and support for this issue. "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thank you again."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "602ec7b8-f18b-4915-94e6-2b4d821482e9",
+     "author": "sreekanthupputuri9",
+     "isAuthor": false,
+     "date": "2025-04-22T16:31:05.125Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "H "
+        },
+        {
+         "text": "@Michael Kovalsky",
+         "href": "https://www.elegantbi.com/post/direct-lake-migration"
+        },
+        {
+         "text": ","
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "when use your notebook code for my Semantic mode is generated 10 .pqt file i am not able to import those into dataflow gen2 how do i do it. ?"
+        }
+       ]
+      },
+      {
+       "t": "img",
+       "src": "/comment-images/d1122d_85cee5515552429184b987f920eb3641.jpg",
+       "w": 918,
+       "h": 413
+      }
+     ],
+     "replies": [
+      {
+       "id": "664aa9c1-ecaf-4d48-9000-064276d5883b",
+       "author": "karan pandya",
+       "isAuthor": false,
+       "date": "2026-01-30T09:59:16.143Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Did you find the solution? "
+          },
+          {
+           "text": "@Michael Kovalsky"
+          },
+          {
+           "text": " Any thoughts on above?"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a17e1c57-6449-4802-9b09-fc7802c213f9",
+     "author": "Biju Jos",
+     "isAuthor": false,
+     "date": "2026-08-12T21:28:26.584Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "whats the cause of this message ?"
+        }
+       ]
+      },
+      {
+       "t": "img",
+       "src": "/comment-images/5d336c_6646b1bce02a48d99645367213a6a3fa.png",
+       "w": 839,
+       "h": 166
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "directquerycompositemodels": {
+   "views": 1589,
+   "likes": 0,
+   "comments": []
+  },
+  "dynamicrlspatterns": {
+   "views": 4179,
+   "likes": 5,
+   "comments": []
+  },
+  "exportbparesults": {
+   "views": 6090,
+   "likes": 5,
+   "comments": [
+    {
+     "id": "760c7f9b-fc71-4820-b00a-89010526e37f",
+     "author": "Rafael Barbosa",
+     "isAuthor": false,
+     "date": "2023-10-30T15:59:52.876Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Is it possible to identify DAX that reference same measure many times instead using variables"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "example = if ([Medida1] = 5, [Medida1], [Medida2]) because it is using [Medida1] twice."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I tried to create new rule in BPA, but it works only in C# script, could you help?"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "string"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "Measure"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "="
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "\"[Medida1]/[Medida5] teste 454512 [Medida3] teste teste e [Medida3]\""
+        },
+        {
+         "text": ";"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "var"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "pattern"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "="
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "@\"[^[{(\\]})]+(?=[[{(]|$)\""
+        },
+        {
+         "text": ";"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "var"
+        },
+        {
+         "text": "    "
+        },
+        {
+         "text": "Result"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "="
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "Regex"
+        },
+        {
+         "text": "."
+        },
+        {
+         "text": "Split"
+        },
+        {
+         "text": "("
+        },
+        {
+         "text": "Regex"
+        },
+        {
+         "text": "."
+        },
+        {
+         "text": "Replace"
+        },
+        {
+         "text": "("
+        },
+        {
+         "text": "Measure"
+        },
+        {
+         "text": ","
+        },
+        {
+         "text": "pattern"
+        },
+        {
+         "text": ","
+        },
+        {
+         "text": "\" \""
+        },
+        {
+         "text": "),"
+        },
+        {
+         "text": "\" \""
+        },
+        {
+         "text": ")."
+        },
+        {
+         "text": "GroupBy"
+        },
+        {
+         "text": "("
+        },
+        {
+         "text": "Value"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "=>"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "Value"
+        },
+        {
+         "text": ")."
+        },
+        {
+         "text": "Any"
+        },
+        {
+         "text": "("
+        },
+        {
+         "text": "group"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "=>"
+        },
+        {
+         "text": " "
+        },
+        {
+         "text": "group"
+        },
+        {
+         "text": "."
+        },
+        {
+         "text": "Skip"
+        },
+        {
+         "text": "("
+        },
+        {
+         "text": "1"
+        },
+        {
+         "text": ")."
+        },
+        {
+         "text": "Any"
+        },
+        {
+         "text": "());"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Result"
+        },
+        {
+         "text": "."
+        },
+        {
+         "text": "Output"
+        },
+        {
+         "text": "();"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "503ab51c-98de-4b7c-a52e-c950f73138d0",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2023-10-30T16:29:48.240Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, doing this with regex will be very challenging. If you have a script, please post an issue on the BPA GitHub page and attach it there."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "exportreportobjects": {
+   "views": 12201,
+   "likes": 8,
+   "comments": [
+    {
+     "id": "59357351-3042-4057-b116-a15e12767c43",
+     "author": "Just Thorning Blindbæk",
+     "isAuthor": false,
+     "date": "2021-08-31T08:02:52.266Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "WOW. This is soooo cool. We have our reports in a Azure DevOps repro and with this script I can extract the metadata in a Azure DevOps pipeline. As I can also do with the model metadata. Combining these two gives us a full data catalogue! Now I just need to figure out where I should store the exported files, so I can make a Power BI dataset and report on top."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "b2eb87c7-b74c-4082-8020-a6a7f6da1a3b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-31T08:09:15.502Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Very cool! You should make a post about the integration with DevOps. And stay tuned, I have more features planned for this script."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "e197954a-69e7-47f3-b166-26eeaa3b0db2",
+     "author": "Just Thorning Blindbæk",
+     "isAuthor": false,
+     "date": "2021-08-31T08:08:47.760Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "We are using only thin reports with live connection to the models. Any chance that you can also export the connection information? So we can more easily bind the information to what model the report is connected to?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "8f7c8b39-edbd-4e55-a4c6-0ab68a384a90",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-31T08:23:39.236Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Are you connecting live to Power BI Datasets? If so, the connection path is made ambiguous within the report metadata so as of now it’s not possible to extract the connection info. However, it is possible for reports which are live connected to Analysis Services models (connection info is maintained)."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "d77486c5-59ad-4fb5-854e-8049fd33f269",
+       "author": "Just Thorning Blindbæk",
+       "isAuthor": false,
+       "date": "2021-08-31T09:03:23.723Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "We are live connecting to models deployed to Power BI. But why is this info not maintained in the connections.json file? I can find several GUIDs but no one matches the GroupId or the DatasetId - where is the translation happening? Can we get this metadata somewhere? :-)"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "3ec84847-31d1-4888-9191-bc9b80ce6e52",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-31T09:08:27.591Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Actually, the dataset’s ID is in the connections file - under PbiModelDatabaseName. However, the group (workspace ID) is not there."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "aca35163-c403-455c-bce1-b810d44b4b11",
+       "author": "Just Thorning Blindbæk",
+       "isAuthor": false,
+       "date": "2021-08-31T10:48:52.722Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I can live with the DatasetId as I already extract all the other Power BI artifact information through the Power BI Scanner API, where I have this relation defined. "
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "Metadata all the things 😎"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "2d3be8a1-87d3-4373-8cfb-5f050de9797a",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-31T11:39:13.596Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "This will be in the next version I post on GitHub. Will be a new output text file with the relevant connection info."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ad2dc064-13aa-41dd-b73b-d0527648758b",
+     "author": "Ben Arendse",
+     "isAuthor": false,
+     "date": "2021-10-16T06:43:09.271Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This is awesome, is it possible to write back as well?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "this because it would be awesome to set report/page filters with devops/editor advanced scripting."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I got reports that are the same but only some filters need to be altered to a different value."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "02bedef6-9ebb-45a6-987b-a12030084947",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-10-17T08:41:39.321Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Thanks Ben. You may see a post on this in the future…stay tuned"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "4475eb61-b6df-4267-9c84-251395899dda",
+     "author": "hari haran",
+     "isAuthor": false,
+     "date": "2021-10-21T13:42:15.798Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "The script is not properly end and I am getting error message. Can you please check and fix it?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "d0364181-bda7-4550-9df5-23891feb3226",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-10-22T12:25:31.160Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "If you have an issue, please raise a bug on my GitHub page, clearly articulating the issue and steps taken."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "d39d3f9c-fa88-4f2e-9a0a-8b823623b4e2",
+     "author": "Noah Grande",
+     "isAuthor": false,
+     "date": "2021-11-15T13:13:21.763Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great!"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Anyone know of a way to pull this same information from a Report that is already hosted on the PowerBI Service without downloading the report into PBIX format first?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "212861bd-4da5-4d87-89b0-b291d63b929d",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-11-15T15:56:18.203Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "At the moment, no. But possibly in a future version."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "c526c02e-5cc9-4ce6-bf57-261e19d39923",
+     "author": "Jakub Tamas",
+     "isAuthor": false,
+     "date": "2021-11-19T08:47:04.640Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This is incredibly powerful, thanks for sharing; Question: is it possible to get any more info about Bookmarks? They are quite a nuisance on big projects and it is very frustrating to try to find out which options they are using or which visuals they refer to (when not using \"All Visuals\")."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "618ddcbc-40bd-4c1f-be41-05f1a7feb95c",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-11-19T08:48:56.887Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Thanks Jakub. More info on bookmarks is coming soon. Note that the primary place for this going forward will be via the Report Analyzer."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "2763faba-5d60-4d96-a10d-64cd98947612",
+     "author": "evan.playle",
+     "isAuthor": false,
+     "date": "2022-03-24T23:01:51.864Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hey,"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Really interested in the UnusedObject.txt specified in the Readme.md of your repo."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "https://github.com/m-kovalsky/Tabular#export-report-objects"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I don't see that functionality in the output of this script. "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I might be stupid, is it here? "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Cheers"
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "137b072b-c1fa-4227-996d-06263a3a9e3f",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-03-25T06:19:27.370Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Evan, you must be connected to the model file within Tabular Editor & set the addPersp parameter to true."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "315f31c4-867f-4a08-9318-45320cfe1ba3",
+     "author": "evan.playle",
+     "isAuthor": false,
+     "date": "2022-08-23T21:28:54.519Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I have found some issues with running the script against files in OneDrive. It works fine on the same files in a local folder."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Any Ideas anyone? "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "18483a24-8b22-4dcd-8194-43aea420ba8c",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-08-24T12:03:53.402Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "That’s strange as I have used this script against files in OneDrive regularly and it works perfectly. What error do you receive?"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "4646a48a-aaf9-42d1-8166-4e5646e1997d",
+       "author": "Charles Mathieu",
+       "isAuthor": false,
+       "date": "2023-03-09T14:18:27.011Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I'm facing the same issue when pointing to a OneDrive path. Have you resolved your issue?"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "I'm getting an error at line 137: File does not exist. Must use a valid .pbix or .pbit file. "
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Not facing this issue when moving the file to a local folder. "
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "48a78302-d9d4-4ea2-a39e-fb1a3026628f",
+     "author": "Raquel LM",
+     "isAuthor": false,
+     "date": "2024-01-05T09:03:30.694Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thank you very mucho for this post. I would like to have also the Filter Details like (Age = >15) but your script don't contain it. I tried to write it my self but I think is very difficult depending on the type of the visual am not sure  how to solve it. I really appreciate it, Thank you very much!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "6537931a-4dbe-4040-bced-a21449f720f0",
+     "author": "Mandlenkosi Sibanda",
+     "isAuthor": false,
+     "date": "2024-05-07T04:48:47.076Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Is there a way to run this without tabular editor? "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "5fba582a-863d-4aa2-8a05-164b4147287c",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2024-05-07T05:23:00.125Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Yes, stay tuned"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "69117f36-0dab-4784-8e65-06aef36ea614",
+     "author": "a_ruk_k",
+     "isAuthor": false,
+     "date": "2026-04-01T13:35:10.846Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I am getting FileNotFoundException as its not able to find Layout file. I checked zip file and it does not have Layout file. "
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "extractmodelmetadata": {
+   "views": 14719,
+   "likes": 4,
+   "comments": [
+    {
+     "id": "5e110744-99f7-4956-836b-ff3318aaf5d0",
+     "author": "Srinivas Akyana",
+     "isAuthor": false,
+     "date": "2020-09-01T14:44:48.122Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Good post Michael! Comes very handy in day to day life. Thanks!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "34d74570-d616-400e-8914-5cac87d9092a",
+     "author": "Brian Mather",
+     "isAuthor": false,
+     "date": "2020-10-07T08:25:29.734Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Oh my word you are a life saver. I'm actually trying to write that script as we speak. Job done, you are a star!!!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "ceef229e-1b06-49e7-b33f-f8e15dec2e41",
+     "author": "w.page",
+     "isAuthor": false,
+     "date": "2021-05-04T13:54:57.422Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I'm get  a token recognition error?"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "any thoughts on what's wrong?"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "C:\\Program Files (x86)\\Tabular Editor>start /wait /d \"C:\\Program Files (x86)\\Tabular Editor\" TabularEditor.exe \"C:\\TabEdit\\AcademicAlliance\\Model.bim\" -S \"C:\\TabEdit\\Tabular-1.3.1\\\""
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Tabular Editor 2.16.0 (build 2.16.7781.40242)"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "--------------------------------"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Loading model..."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Executing script 0..."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "line 1:2 token recognition error at: '\\T'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "line 1:10 token recognition error at: '\\T'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "line 1:24 token recognition error at: '\"'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "line 1:2 token recognition error at: '\\T'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "line 1:10 token recognition error at: '\\T'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "line 1:24 token recognition error at: '\"'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Script compilation errors:"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Error CS1056 on line 1, col 3: Unexpected character '\\'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Error CS1056 on line 1, col 11: Unexpected character '\\'"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Error CS1010 on line 1, col 25: Newline in constant"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "7691c688-f228-48cf-9105-02ccc4a7880a",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-05-04T14:42:09.416Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I suggest running the script from Tabular Editor itself. However, if you want to run it through the command line you will need to put the full location of the c# script (ending in ‘.cs’). "
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "db405fd5-0314-4d3b-83a7-19ca86cfea13",
+       "author": "w.page",
+       "isAuthor": false,
+       "date": "2021-05-04T17:28:49.673Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "thank you"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a6d3c843-64e3-4150-ab6a-ac85997882e6",
+     "author": "Vanessa van gelder",
+     "isAuthor": false,
+     "date": "2021-08-05T11:26:27.279Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "great post, pity i can't get it to work, have done everything as stated but get the error object reference not set to an instance of an objects, using the .bim  method"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "bf373e26-0386-48c7-930f-a303ba21a97b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-05T11:48:17.205Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You may want to try running the c# script directly in Tabular Editor (in the Advanced Scripting window). Make sure to set a valid folderName in the first line of the script."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "b35d81a8-6c15-4340-80eb-119b72b65639",
+       "author": "Arun Misra",
+       "isAuthor": false,
+       "date": "2021-08-28T03:13:01.488Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I'm also getting the same error \"object reference not set to an instance of an object\" - when executing in TE3 it is flagging the tables section as having the error, line 37. "
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "If I comment out the tables section, script runs for the rest of the model."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "cae9d73f-ec32-4edf-8370-4c7386a72f34",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-29T06:52:26.207Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Thanks for clarifying. This should be resolved in v1.3.2 which I just released on GitHub."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "86736b04-0d9a-4a7a-b6d7-c6955d10eb20",
+     "author": "Raquel LM",
+     "isAuthor": false,
+     "date": "2023-12-20T13:16:44.021Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I would like to export the data model properties from multiple .bim files located in a folder (or in Azure that could be even better) , could that be possible? do it in one script, like the script you created for reports stored in a folder."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "a9de08ea-1a0a-41ed-b126-59fe09ec9f51",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2023-12-20T13:23:34.377Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You could use the same loop as in the following script - just with the export metadata script inside the loop."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "https://github.com/m-kovalsky/Tabular/blob/master/BPA/BPAScanFolder.cs"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "findblankrows": {
+   "views": 3431,
+   "likes": 16,
+   "comments": [
+    {
+     "id": "69caeaa0-1b83-4633-902f-6d1368f1e9c5",
+     "author": "fabiaN odU",
+     "isAuthor": false,
+     "date": "2021-10-06T12:42:21.191Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks for sharing your knowledge about Power BI, I have learned a lot from your posts.  In the second section.... "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\"What this means is that there is a value on one side (the 'from-side') of a relationship that does not exist in the other side (the 'to-side') of the relationship. \""
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I thought this was the other way round? Should in not be saying \"there is a value on the many side (Revenue) that does not exist in the one side (Market Segment)\"? "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "5a1471b6-6bd4-4fb9-812f-7ba18d0d6fe2",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2021-10-06T12:49:44.564Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, the ‘from-side’ is generally the ‘many-side’ (in a many-to-one’ relationship). That is how relationships are thought of in Power BI / tabular."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "559e8a03-12a0-4136-aaa0-49da6c293c6f",
+     "author": "Sameer Bhide",
+     "isAuthor": false,
+     "date": "2022-01-03T05:50:01.870Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "@MK - I think you should say - there is something in the Fact table (Many Side)  that is not in the Dimension  (One Side)"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Cheers"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Sam"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "09b5927f-f654-43b0-96aa-afa678a9e775",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-01-05T07:41:44.092Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Sam,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "Generally speaking, you are correct. However, fact and dimension tables do not cover all scenarios - notably bridge tables. This is why I refer to the ‘FromTable’ and ‘ToTable’. This is also consistent with how it is documented in tabular modeling."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "mastermodel": {
+   "views": 11132,
+   "likes": 15,
+   "comments": [
+    {
+     "id": "a4637608-0dd5-4f73-9078-2b4545401da6",
+     "author": "Ben Arendse",
+     "isAuthor": false,
+     "date": "2022-03-31T09:23:22.236Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Im working with the mastermodel but one of the challenges that i'm have now is that when a derivative perspective has a measure but the measure/column its referring to isnt in that derivative perspective that during the deployment it will give me a error."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Is there a way to setup a BPA rule for when a measure/column is missing in a derivative perspective in the mastermodel?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Kind regards,"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Ben"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "38f6c00e-7073-4c4b-9295-a93ce8209852",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2022-03-31T10:04:03.443Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Ben,"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I recommend using the MiniModelBuilder tool as it takes dependencies into account."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "https://github.com/m-kovalsky/MiniModelBuilder"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "37d3fd3b-15eb-4800-825b-207dc9348099",
+       "author": "Ben Arendse",
+       "isAuthor": false,
+       "date": "2022-03-31T10:24:54.200Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi, "
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Thnx for your quick reply 😊."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "But is a BPA rule possible?"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Im using the mini model builder."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "But my colleague arent using it and sometimes its easier to just use the gui."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I have a query for it but it seems i can only parse values that are in the bpa rule set. "
+          },
+          {
+           "text": "(current.name,",
+           "href": "(current.name,"
+          },
+          {
+           "text": " etc )."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Kind regards,"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Ben"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "c41b69f1-c906-4401-b9e7-00177231fa75",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-03-31T16:32:45.055Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Easiest solution would be for your team to use the tool. But you raise a good point. However, a BPA rule would require tabular editor to have a method for detecting objects which are referenced but don’t exist in the model. I raised an issue on tabular editor 3’s GitHub page."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "81b65dc4-e5b0-45cd-991c-ee27041908d7",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-04-12T09:47:19.163Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "It is unlikely that this will become a BPA rule. However, tabular editor 3 has a built-in functionality which highlights measures/columns which have errors (such as missing dependent objects). I recommend you use that."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "c19a77c1-b3a4-43a2-8f07-d13fa10e7848",
+     "author": "Ramon Villanueva",
+     "isAuthor": false,
+     "date": "2023-04-16T12:37:09.226Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "In my case I have an Azure SSAS that it's automatically generared by a development tool."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I can make some aditions using tabular editor (calculation Groups, KPIs,...). The problem it's that if I recreate the model, I loose all the modifications."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Can I use this technic to maintaint the changes?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks in "
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "modelautobuild": {
+   "views": 3576,
+   "likes": 15,
+   "comments": []
+  },
+  "naturenumbers": {
+   "views": 1752,
+   "likes": 2,
+   "comments": [
+    {
+     "id": "7ecd1585-ec8b-4970-9720-a856a1a33ea7",
+     "author": "Mihai",
+     "isAuthor": false,
+     "date": "2021-04-21T15:44:03.930Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "How did you make the clustered columns transparent, so that the blue horizontal line is visible behind them? Can't find such a setting anywhere."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "e2faf430-9e6b-4184-a1fe-f6e7bcb8256f",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-04-21T16:22:47.281Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Mihai,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "I used the ‘send to back’ option for the clustered column chart. That makes the visual with the blue lines show on top."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "bfb9e900-243b-4a5c-90c2-ad681ac3816b",
+       "author": "Mihai",
+       "isAuthor": false,
+       "date": "2021-04-21T16:43:13.469Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "But then wouldn't the white bars (lower part of the stack) cover the clustered bars ? Anyway, I found the solution in the meantime, if the bars have only one color, then the conditional formatting button appears back and you can use a measure that would set a transparent color for you, by adding two digits representing the transparency to the color hex code, like this "
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "IF ( NOT ( ISBLANK ( [% Occurrence] ) ), \"#B7B7B790\" )"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Then, this measure can be used for conditional formatting as a rule, and would make the columns transparent."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Overall nice solution and I managed to make it work, but had to play a bit with the y Axis max values in order to align the two charts vertically, not the best workaround but works for a particular report once you know your values."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a4df979d-4a2d-4370-9adb-dbefa2ffb130",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2021-04-21T16:51:49.278Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Make sure to set the background in the formatting pane to ‘Off’ for the clustered column chart. This allows the blue lines to show through. I didn’t use conditional formatting and would advise against it for performance reasons."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "029c2a1f-0bbe-4c0a-bfae-7a484c848914",
+     "author": "coulterthomas",
+     "isAuthor": false,
+     "date": "2021-07-23T11:59:33.871Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I ran this code against some data that I have been working and I've run up against a problem that I can't figure out.  The % Occurrence column is returning the same percentage for all 1-9.  It is absolutely correct for '1' but then it repeats.  I can't figure it out."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "60d2301e-b9fc-444e-b0bb-5f914c79a595",
+     "author": "David Latona",
+     "isAuthor": false,
+     "date": "2021-08-31T09:58:02.828Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Nice blog thanks for postingg"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "perspectiveeditor": {
+   "views": 3328,
+   "likes": 1,
+   "comments": [
+    {
+     "id": "d3b1c3ff-70b0-482a-abfd-fdc3d3839997",
+     "author": "mohamed.kapadia",
+     "isAuthor": false,
+     "date": "2021-01-14T13:01:22.674Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, This script work fine when model is relatively small but is not working when Model is too big. Is there a way to run it just for particular selected tables ?"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "5d4b9637-45f1-491a-b6c5-0d4c3b77ac2f",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2021-01-14T16:31:16.197Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, the speed of the script is not dependent on the size of the model. The reason the script takes a few seconds to load since it dynamically fetches the images needed for the tool from GitHub. "
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "22e78501-d849-468e-b793-7f7aad8cce2d",
+     "author": "mohamed.kapadia",
+     "isAuthor": false,
+     "date": "2021-01-14T17:09:34.092Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi MK, It's giving me syntax errors for one particular model. is it because i am connected to model using model.bmi file ? but when i tried for another smaller model it works fine. So, just wondering why it would work for one model and not for the other ?"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "42465701-a6ae-49ec-9907-4e7fd177a1fa",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2021-01-15T08:49:53.734Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Sounds like there may be an issue with the .bim file. If you're able to send me the .bim file I may be able to help you. Can send it to mk@elegantbi.com."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "processingmanager": {
+   "views": 6519,
+   "likes": 9,
+   "comments": [
+    {
+     "id": "b186ad25-11b5-49b8-a549-613089c57272",
+     "author": "ginsususan",
+     "isAuthor": false,
+     "date": "2021-05-04T16:16:11.679Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael, "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This is great! Thanks for developing this super useful tool. "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I would like to know "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "1. If we can use ADF to process the batch script."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "2. If we automate fact partitions (I have monthly partitions) how do we generate partitions every month using this tool?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Ginsu "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "889e1a32-4002-4729-aa5b-2d6396d46e89",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-05-05T04:05:50.596Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Ginsu,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "You should be able to use ADF to process the batches using the script and an Azure Function. This tool currently does not support generating partitions. However, it can be done using c# and TOM. There are so many possible scenarios around this that it’s difficult to build something generic. If you have ideas, feel free to share."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "70574acd-4dd2-4ec4-bebe-7db73f2e4927",
+       "author": "see_d_jay",
+       "isAuthor": false,
+       "date": "2021-06-24T15:29:33.838Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "The tool here overlaps somewhat with one created a few years back: "
+          },
+          {
+           "text": "Analysis-Services/Automated Partition Management for Analysis Services Tabular Models.pdf at master · microsoft/Analysis-Services (github.com)",
+           "href": "https://github.com/microsoft/Analysis-Services/blob/master/AsPartitionProcessing/Automated%20Partition%20Management%20for%20Analysis%20Services%20Tabular%20Models.pdf"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Would be cool to see a synthesis of the two. :)"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "ccf58135-8938-41c3-b77a-a5ebca18b33b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-09-03T09:31:52.493Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Tell me more if you have any specific ideas. Generalizing this is not so simple since there are so many scenarios."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "2b6f97d5-d393-4735-819d-9bf42a3c4601",
+     "author": "Arun Misra",
+     "isAuthor": false,
+     "date": "2021-06-05T01:23:38.827Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Excellent idea and thoughtful approach. Could you advise how these scripts can be executed as macros in Tabular Editor 3?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "91c3d1db-6f56-4ca2-b412-b5e3f95a34fa",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-06-07T08:24:48.144Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Arun,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "The concept of Macros in TE3 is generally the same as Custom Actions in TE2. The only difference is that you can record work done within your model and the Macro will generate the code. That being said, the ProcessingManager script can be run in the C# script window as before. The second script is not meant to be executed in Tabular Editor itself. It is meant to be run through the command line."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "b40e7fce-ea03-446c-9640-6acd8776d326",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-29T06:54:19.805Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "It is done in the same way in which Custom Actions are done in Tabular Editor 2. Save the script as a Macro and then you can open the Macro and execute it."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a77bbf35-6ccf-4414-bd00-3dead2de7987",
+     "author": "Arun Misra",
+     "isAuthor": false,
+     "date": "2021-08-28T04:17:11.061Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "MK - any thoughts on how to do an \"all except\" approach with this? One batch does the specifically-annotated big/incremental partitions. Would like a second batch that processes everything else, dynamically picking up new tables as they are added to the model (i.e., they would have a blank annotation)."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "efbf4abc-7122-4b19-9428-6dabbd9c100b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-09-03T09:30:27.462Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Nice idea, Arun. May include this in a future build."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "2a51c73b-35af-48a3-ad3f-82212c69ad57",
+     "author": "chrisherv",
+     "isAuthor": false,
+     "date": "2021-09-03T08:47:08.507Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi  Very nice post  "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "But just an idea , instead to process a table or a partion ,  we would like to  update a dax formula of a dataset measure <--  on Processing manager (or Azure Devops)  ?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Do you think it's possibe (or in the future) ?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Very useful for CICD & AML"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Currently we can't do that via TMSL script , no ? "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "d9d3de2e-77ae-4d1e-847b-5d19e1ca9f1e",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-09-03T09:29:15.310Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You can do this with the MiniModelBuilder. Or run a simple TOM/c# script that updates the measure expression."
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "https://github.com/m-kovalsky/MiniModelBuilder"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "08d76305-4520-49fd-884e-96008af6f606",
+     "author": "Cosmin Ioan",
+     "isAuthor": false,
+     "date": "2022-02-02T12:33:34.757Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "hi Michael, this is of great help.  I have recently started/attempted  automating this in production and unfortunately, it seems it does not work well when implementing it into a SQL Agent Job, as a CmdExec.  It seems the Set batchName=xxx  is not being respected/retained for the second line of start ...  and the command returns successful right away.  "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Not sure how other people manage the automation, or whether it is feasible, within a SQL Agent Job, as is.  thanks bunches, Cosmin"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "c5238231-929b-48cf-a486-aca74809b3e9",
+     "author": "Marcos Bertini Ribeiro",
+     "isAuthor": false,
+     "date": "2022-02-03T14:21:56.933Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael, "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Congratulations, this tool is really very useful!"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Only one question:"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I would like to run the refresh scripts with a where contitional in a column, is this possible?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "e.g. I have a database for several clients and when I add a new client to my database, I would like to update only his data in my partitions and not the complete model."
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "8759c3c0-d475-4a8b-9dd3-3ec0737adbeb",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-03-18T09:08:51.345Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Marcos,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "For this you would need to update the partition with the appropriate condition. You could do this in a simple c# script but this is a separate functionality from this tool."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "17ee2e4b-edbe-44fd-a971-837a892aaa38",
+     "author": "Cosmin Ioan",
+     "isAuthor": false,
+     "date": "2022-04-08T13:16:50.420Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "has anyone ever managed to implement the  Processing Manager via the SQL Server Agent job, against on-prem SSAS 2019?  --  Reason being, it appears, when the job fails, the actual error DOES NOT surface through the SQL Agent error stack, and produces a false positive that the job finished without error.  "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "thanks kindly for any thoughts."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Cos"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "0cf5649f-d654-42cc-af93-1b711e8df973",
+     "author": "DVA",
+     "isAuthor": false,
+     "date": "2022-05-30T12:06:01.758Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great Work. Can we add a timer? I do not want to process all my tables at once. I need to add a time-delay(sleeper). Is this possible? Thanks"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "b8f0a7bb-2eb2-4562-8f31-60a2f808ea8a",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-05-30T12:27:16.064Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "As an example, you may add this code to have a delay of 3 seconds."
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "int x = 3000;"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "System.Threading.Thread.Sleep(x);"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a08940d9-aa49-43ec-b146-ecdbabc12058",
+     "author": "samuel.moronkeji",
+     "isAuthor": false,
+     "date": "2023-02-05T03:31:30.212Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi MK, thank you for this!"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "On the command-line bit for Power BI Premium, what do I need to change to be able to pass in my work email id & password as I don't have the permission to register any app within the Azure portal but I'm the workspace admin & owner of the dataset."
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "7510f408-9278-44e8-be66-aabc9632b85b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2023-02-08T08:23:21.210Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi, yes you can do this with your email and password. You will get a prompt to authenticate on your phone via Azure AD when you run the command line script."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "The code from User ID would look like this:"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "User ID=blah@email.com;Password=yourpassword”"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "66e4ce7a-3b5a-4ea2-a719-a0051e253d40",
+     "author": "Divyanshu Sharma",
+     "isAuthor": false,
+     "date": "2024-03-19T02:50:25.242Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Can I run XMLA scripts through APIs?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "739e3b7a-c286-4f51-ba00-5146ad191e19",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2024-03-19T12:05:04.904Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You can run XMLA scripts via semantic link in a fabric notebook (fabric.execute_xmla)"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "processobjects": {
+   "views": 3671,
+   "likes": 7,
+   "comments": [
+    {
+     "id": "45186bd2-4275-4852-8d3b-4d32eba2ec61",
+     "author": "sebastiankarrion",
+     "isAuthor": false,
+     "date": "2022-06-16T05:12:51.019Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hello. Thank you very much for sharing your knowledge and helpful tools. They have been very helpful. Could you please help me with the error that I show in the attached image."
+        }
+       ]
+      },
+      {
+       "t": "img",
+       "src": "/comment-images/c3a0af_6cf7af5134064423a29676e45fc79abc.jpg",
+       "w": 981,
+       "h": 509
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "reportanalyzer": {
+   "views": 24621,
+   "likes": 11,
+   "comments": [
+    {
+     "id": "ae5bad8e-2574-4510-88f8-c4f166fe0cb6",
+     "author": "Jay Vataliya",
+     "isAuthor": false,
+     "date": "2022-01-12T14:22:17.966Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Amazing tool. Thank You :)"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "dac75ea8-46e1-408f-9929-2969737c2730",
+     "author": "Just Thorning Blindbæk",
+     "isAuthor": false,
+     "date": "2022-01-26T16:01:15.088Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This is truly amazing!"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "When searching for VisualId in Log Analytics, you can also use some of the build in kusto function instead of substring. Check this out:"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "PowerBIDatasetsWorkspace"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "| where OperationName == \"QueryEnd\""
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "| extend Sources = parse_json(ApplicationContext).Sources"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "| mv-expand Sources"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "| extend DatasetId = tostring(parse_json(ApplicationContext).DatasetId)"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "| extend ReportId = tostring(parse_json(Sources).ReportId)"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "| extend VisualId = tostring(parse_json(Sources).VisualId)"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": ",DurationMs"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": ",EventText"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": ",ApplicationContext"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "| order by DurationMs desc "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I'm not a big kusto expert, but I just \"more or less\" copied the code from the official Power BI Log Analytics Template Report."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "3bbb60ac-5860-464d-9e06-48dcb8107b8e",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-07-28T08:29:41.851Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Thanks Just! I ran the code you provided and received some errors. I cleaned it up a bit and just posted it to GitHub. I like your method for parsing much better! "
+          },
+          {
+           "text": "https://github.com/m-kovalsky/ReportAnalyzer#log-analytics-visual-matching",
+           "href": "https://github.com/m-kovalsky/ReportAnalyzer#log-analytics-visual-matching"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "8cc849d1-44b9-4ea2-9152-a2254d31b3d7",
+     "author": "Garrett Fox",
+     "isAuthor": false,
+     "date": "2022-07-21T06:56:01.159Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks so much Michael for the fantastic tool. Any idea if anyone is working on Tabular Editor type of tool for editing reports in a more automated way with C# scripts for example? For example looping through all visuals in a report to replace one measure with another measure. Or looping through all visuals of a certain type to set a certain color to blue, etc."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "ea15096b-7b7d-447a-ac0a-638cd481e488",
+       "author": "Just Thorning Blindbæk",
+       "isAuthor": false,
+       "date": "2022-07-21T07:17:15.369Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Maybe not exactly your use case, but wanted to be sure you know about pbi-tools? This tool can export the report in a friendly format, where you more easily can do these replacements."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Check it out: https://pbi.tools/"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "24db713a-2136-47fe-ba65-4028993c2922",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-07-21T16:49:13.846Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I actually started writing scripts for these 2 applications you mentioned some time ago. Goal was for it to be built into the Report Analyzer. However, I’m finding that parsing through the underbelly of the .pbix for these cases is a huge game of whack-a-mole and finding every instance of a given measure etc is not as simple as it appears."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "a39320c7-3c8c-477b-a341-7aca047212e6",
+     "author": "Dane Belarmino",
+     "isAuthor": false,
+     "date": "2022-08-15T13:57:52.828Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hello,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Thanks for the tool."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Installed it but unfortunately can't make it work. It says that the folder I selected is invalid but that folder does have a pbix in it."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "reportanalyzerrecos": {
+   "views": 4190,
+   "likes": 5,
+   "comments": [
+    {
+     "id": "ad170d82-b0b3-4082-af7c-985409685d52",
+     "author": "Noah Grande",
+     "isAuthor": false,
+     "date": "2021-12-15T09:45:44.292Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hey,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "The ”Report Best Practice” recommendations is a great addition!"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Looking forward to being able to add customize rules (Like TE Best Practices). In the interim, adding a rule to check for Filter visuals that are in Checkbox Mode instead of Dropdown Mode would be great, as Ive found loading each of these filters checkboxes can take time, and other visuals will only load after these have been populated (especially if you have a default value selected in the filter visual!)."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "reportlevelmeasures": {
+   "views": 8945,
+   "likes": 7,
+   "comments": [
+    {
+     "id": "6238d9c4-42af-43ee-bee1-9c6408879f12",
+     "author": "L",
+     "isAuthor": false,
+     "date": "2021-08-20T20:49:38.682Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi MK, great post there. "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "It helped me already with goal I try to achieve, which is marging back model and report to single pbix. "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "After removing live connection in report pbix I was able to recreate my model inside this file, but what I've discovered is that there are leftover report level measures not being part of a model. So I've grabbed them with script you've posted, and I'm able to inject them as part of a model, but here is an issue - I've got both leftovers from layout part of pbix and actual measures, and they event got same name (!). "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I'm not sure how to remove those report level measures from pbix, bacause in Desktop I'm not able to interact with them after I've removed live connection. They work, but if I try to delete/rename/move them, nothing happens. So, how do I remove them from layout file before reinjecting them as model measures?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I would like to avoid option of delating them in first step of a process of this marging, as I've spend quite a lot of time already rebuilding model inside report file only to notice I've lost ability to interact with report level measures ;P"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Regards,"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "c3642377-7ea3-49fc-b326-31246130b7db",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-08-22T13:12:50.086Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "It’s not possible to remove report-level measures through such a script since modifying the Layout.json causes a corrupt .pbix file. It should be noted that this script will not create the measure if a measure with the same name already exists."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "83bb1239-f5bb-4a95-8813-ac4ed09ea001",
+       "author": "Adel SASSI",
+       "isAuthor": false,
+       "date": "2023-08-14T08:36:13.069Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi l,"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I did it with "
+          },
+          {
+           "text": "pbi-tools",
+           "href": "https://pbi.tools/"
+          },
+          {
+           "text": ". I extracted the pbix file then I dumped the \"modelextensions\" property in the Report\\config.json file. Then I "
+          },
+          {
+           "text": "compiled ",
+           "href": "https://pbi.tools/tutorials/getting-started-cli.html#9-compile-the-sources-into-a-pbit-file"
+          },
+          {
+           "text": "the extraction into a pbit file. And it works for me :)"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Tell me if it works for you."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "PS: I guess the pbix file is no longer supported by Microsoft... Maybe using the \"PBI Folder Project\" feature could avoid this. Unfortunately, in my company we use Power BI Desktop RS which doesn't have this feature yet."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "af10804f-c258-4448-88e9-3a79bb2e8e9c",
+     "author": "Arun Misra",
+     "isAuthor": false,
+     "date": "2021-09-25T04:17:41.834Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Had a use case pop up for this, and remembered your post. Excellent work, worked seamlessly with a model hosted in service/XMLA, migrating measures from a local pbix."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "d7187b84-2360-4f4f-a095-72fa45715821",
+     "author": "afoulk311",
+     "isAuthor": false,
+     "date": "2022-11-11T13:37:59.259Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Does this have some sort of advantage over using an existing tool like ALM Toolkit?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "6ae0d39c-8526-47da-8730-f9514a335821",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-11-13T13:15:46.563Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I don’t think this is possible with the ALM Toolkit. The measures created within the report are not in the .bim file (which ALM Toolkit uses)."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "f82a0be9-9aa9-4bd9-bdef-8f3ac462de3e",
+       "author": "afoulk311",
+       "isAuthor": false,
+       "date": "2022-11-14T17:54:43.342Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I’m not certain on the specifics of where each part lives within those files, but I do know I can push Measures, Relationships, Tables, and more between Datasets using ALM Toolkit."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "96e05827-79b5-4b1a-96ca-03ca7c088077",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-11-14T19:14:21.854Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You said it exactly yourself. ALM Toolkit can push between datasets but this article describes measures which exist solely in the report and are not in a dataset."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "8162f65d-e1c0-4e4e-8981-63ae6cc41e1f",
+     "author": "Fahad Khan",
+     "isAuthor": false,
+     "date": "2023-01-23T15:03:46.106Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "is this supported for composite model?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "b78041c3-c302-460d-a077-b5d79cbef52f",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2023-01-23T20:45:39.103Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "If by composite model you mean a model that has north DirectQuery and Import mode tables then yes, this would work just fine. This simply allows for consolidation of measures built in the report to be migrated back to the model."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "38ea8c40-63bb-4934-8555-2beefee47dc5",
+     "author": "Oliver Mills",
+     "isAuthor": false,
+     "date": "2023-06-01T13:58:03.054Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi can this script be extended to include the measure descriptions as well?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "438be041-8736-417c-8148-ee8c249a5afe",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2023-06-02T12:02:11.139Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Scripts for updating descriptions exist on my GitHub page and I believe I have a blog post on it as well."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "92d322b9-0500-46f6-96d0-ced279b5fb4f",
+     "author": "Mohsen Alizadehfard",
+     "isAuthor": false,
+     "date": "2024-03-06T07:48:10.077Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi MK, thank you. Is it possible to add the measures to the report? I would like to copy report-level measures from one report to another report. Both reports are live connected to the Power BI Dataset / Semantic Model. "
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I was able to extract the measures and the script for adding measures using your code. But I can't connect my report to the tabular editor and get the following error "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "c20214e6-514e-47be-84c1-4764e7e22773",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2024-03-06T14:42:27.450Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "There is no automated way to do this at present. But there will be in the future."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "83141f72-1264-4abe-831e-c70d83de96d3",
+     "author": "K D",
+     "isAuthor": false,
+     "date": "2025-03-26T08:12:53.971Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Just very big thanks, the code works super perfect. Just thank you million times you save a lot of time, solution is insane. Thanks Thanks Thanks !!!!!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "tabularstyleguide": {
+   "views": 6243,
+   "likes": 7,
+   "comments": [
+    {
+     "id": "a53761f3-cfac-49ba-9b4d-f9c6f3d64e0b",
+     "author": "Jukka",
+     "isAuthor": false,
+     "date": "2021-03-03T13:31:00.162Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great guide, thanks! Is dividing Date and Time "
+        },
+        {
+         "text": "*Always*",
+         "b": true
+        },
+        {
+         "text": " the way to go in PBI? I'm analyzing 3 simultaneous markets that all are on hourly (UTC) resolution and are in their own Fact tables. Each hour has its own reference prices and done trades. So hours are totally their own \"universes\". I need to present the values in non-UTC time zone and I'm analyzing several years worth of hourly data meaning I also have DST changes involved. I'm having hard time wraping my head around how to divide Date and Time and doing the time zone conversions and DST changes without losing the connection between each single hour of the period and all markets and reference prices. Currently I have \"Calendar\" with DateTimeUtc (key) and DateTimeNonUtc (for visuals) for each hour of the period and it works."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "f76f3eb4-795f-4bfc-832a-bbba16eea3eb",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2021-03-03T14:23:16.693Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Jukka,"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "Having date and time in a single column will lead to higher cardinality. It is not always possible but if it can be done it is recommended. Here’s something for you to try:"
+        },
+        {
+         "text": "\n"
+        },
+        {
+         "text": "I suggest that you convert the times to all be of a single time zone in your data warehouse. Then, you could split the datetime into 2 columns (for each fact table) of Date & Hour. Then, have 2 corresponding dimensions: Date & Hour. Each fact would relate to both Date & Hour dimensions."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "top10bestpractices": {
+   "views": 42108,
+   "likes": 7,
+   "comments": [
+    {
+     "id": "a43b8702-f02c-4142-a9c6-6ae6210023bb",
+     "author": "Martin de la Herran",
+     "isAuthor": false,
+     "date": "2021-04-12T17:07:52.105Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great article!"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "My only very minor point, DIVIDE() is great, but cannot always be pushed to the SE, so sometimes (specially within SUMX and other iterators) you might have better performance using \"/\", as long as you are sure that there is no zero denominator."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Anyways, I just discovered your blog, great resource!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "5c125819-ba9b-45a0-9df1-42ec267f7eb3",
+     "author": "Dharmik Naik",
+     "isAuthor": false,
+     "date": "2021-04-27T11:23:40.217Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great article. Thanks for posting it."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "ec6c045f-f615-4a44-a0d4-490afd382f77",
+     "author": "Nate Brunner",
+     "isAuthor": false,
+     "date": "2021-05-03T20:42:37.237Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Awesome post...thanks for this."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "8b77a82f-2525-4f10-a83a-b2a698d27044",
+     "author": "Terry Xu",
+     "isAuthor": false,
+     "date": "2021-09-22T07:20:45.209Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "For rule #1 unused columns, I tried the BPA rule & best performance analyzer for some of my reports but only 1 report gave me the unused columns. However, after I created a test column which is not used in my reports, the rule did not pick up the column for me. Is there anything else I need to look at to make the rule working properly?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "5daee2ce-99f9-47ee-9bd8-4be3cdfeb997",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-09-22T07:59:59.501Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "This rule (as well as all the rules in the Beat Practice Analyzer) are only related to the model, not the report. A column which is deemed unnecessary must abide by all the logic shown within the rule (hidden, not referenced by measures etc.)."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "3202c4b6-de24-425e-8253-bb2ad21364bc",
+     "author": "claire vere nicoll",
+     "isAuthor": false,
+     "date": "2022-04-29T08:58:43.376Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Super interesting for all people working as English Business trainers; in relation to subjects such as Power BI, Business Intelligence, Data Intelligence, Analytics etc "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "AcquaPlanet for linking our world with new forms of communication to maintain vital stability and peace across our planet: for our people, North, South, East and West. "
+        }
+       ]
+      }
+     ],
+     "replies": []
+    }
+   ]
+  },
+  "trackmodelmodes": {
+   "views": 629,
+   "likes": 2,
+   "comments": []
+  },
+  "vertipaqintabulareditor": {
+   "views": 11777,
+   "likes": 4,
+   "comments": [
+    {
+     "id": "8187756c-4d57-4908-8325-49a6ff9196d3",
+     "author": "Farhan Soomro",
+     "isAuthor": false,
+     "date": "2021-02-07T22:42:21.048Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Mike , I ran the script and model is attached with PBI desktop but I cannot able to see Annotation "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "3f1bd2c6-0958-4976-b650-46e9a6ed7868",
+       "author": "Debbie Edwards",
+       "isAuthor": false,
+       "date": "2021-10-15T15:50:23.874Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Did you go to File. Preferences and Allow Unsupported Power BI Features?"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "24e4e698-9378-4c6e-acd5-123267f0f55b",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-10-17T08:37:53.611Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Yes, exactly."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "1a286eb4-307c-44e1-b007-139c7a9888b9",
+     "author": "Ben Arendse",
+     "isAuthor": false,
+     "date": "2021-03-19T11:58:28.987Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Great article 😁"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Do you have anymore best practice rules based on de vertipaq results?"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Kind regards,"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Ben"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "f16670b4-524e-44df-b199-cbe8d1fd61a1",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-03-19T12:10:45.271Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi Ben,"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "See all the rules published in the link below. There are more which scan the vertipaq data (they have an asterisk). If you have other rules in mind feel free to share."
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "https://powerbi.microsoft.com/blog/best-practice-rules-to-improve-your-models-performance/"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "1cb2ff92-4e7a-4a7b-bdd3-f47879bc9d2a",
+       "author": "Debbie Edwards",
+       "isAuthor": false,
+       "date": "2021-10-15T15:52:56.279Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I have this question to and reading the information you linked there is the following: * In order to run this rule, you must first run this "
+          },
+          {
+           "text": "script",
+           "href": "https://github.com/m-kovalsky/Tabular/blob/master/VertipaqAnnotations.cs"
+          },
+          {
+           "text": " as documented "
+          },
+          {
+           "text": "here",
+           "href": "https://www.elegantbi.com/post/vertipaqintabulareditor"
+          },
+          {
+           "text": "."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "** In order to run this rule, you must first run this "
+          },
+          {
+           "text": "script",
+           "href": "https://github.com/m-kovalsky/Tabular/blob/master/BestPracticeRule_LongLengthColumns.cs"
+          },
+          {
+           "text": " "
+          },
+          {
+           "text": "in the same fashion as the note above."
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "*** In order to run this rule, you must first run this "
+          },
+          {
+           "text": "script",
+           "href": "https://github.com/m-kovalsky/Tabular/blob/master/BestPracticeRule_SplitDateAndTime.cs"
+          },
+          {
+           "text": " in the same fashion as the note above."
+          },
+          {
+           "text": "\n"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "So there are 3 Rules you can set up but you only mention setting up the first one * It would be good to know how to set up the other rules in this doc by creating new rule."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "daa0cd88-3f7c-4bc6-8bfc-c5b611dd4415",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-10-17T08:39:22.028Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "This info is on the GitHub page for the Best Practice Rules. https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "0cb45ad6-0e32-4691-9eda-eff29d9334b3",
+       "author": "Debbie Edwards",
+       "isAuthor": false,
+       "date": "2021-10-19T15:13:28.573Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Its proving to be really difficult getting the information I need. "
+          }
+         ]
+        },
+        {
+         "t": "ul",
+         "items": [
+          [
+           {
+            "text": "\"The following rules require running an additional script before running the Best Practice Analyzer"
+           },
+           {
+            "text": "\n"
+           },
+           {
+            "text": "Avoid bi-directional relationships against high-cardinality columns * DONE"
+           },
+           {
+            "text": "Large tables should be partitioned *"
+           },
+           {
+            "text": "Reduce usage of long-length columns with high cardinality *^"
+           },
+           {
+            "text": "Split date and time ***"
+           },
+           {
+            "text": "Fix referential integrity violations *"
+           }
+          ]
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "*These rules use "
+          },
+          {
+           "text": "Vertipaq Analyzer",
+           "href": "https://www.sqlbi.com/tools/vertipaq-analyzer/"
+          },
+          {
+           "text": " data. There are 2 methods to load this data into Tabular Editor:"
+          },
+          {
+           "text": "\n"
+          }
+         ]
+        },
+        {
+         "t": "ol",
+         "items": [
+          [
+           {
+            "text": "Load Vertipaq Analyzer data directly from a server ("
+           },
+           {
+            "text": "instructions",
+            "href": "https://www.elegantbi.com/post/vertipaqintabulareditor"
+           },
+           {
+            "text": ") ("
+           },
+           {
+            "text": "script",
+            "href": "https://github.com/m-kovalsky/Tabular/blob/master/VertipaqAnnotations.cs"
+           },
+           {
+            "text": "). I used your instructions here. "
+           }
+          ],
+          [
+           {
+            "text": "Load Vertipaq Analyzer data from .vpax file ("
+           },
+           {
+            "text": "instructions",
+            "href": "https://www.elegantbi.com/post/vpaxtotabulareditor"
+           },
+           {
+            "text": ") ("
+           },
+           {
+            "text": "script",
+            "href": "https://github.com/m-kovalsky/Tabular/blob/master/VpaxToTabularEditor.cs"
+           },
+           {
+            "text": ")."
+           }
+          ]
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "^Run this "
+          },
+          {
+           "text": "script",
+           "href": "https://github.com/m-kovalsky/Tabular/blob/master/BestPracticeRule_LongLengthColumns.cs"
+          },
+          {
+           "text": " while live-connected to the model."
+          },
+          {
+           "text": "\n"
+          },
+          {
+           "text": "***Run this "
+          },
+          {
+           "text": "script",
+           "href": "https://github.com/m-kovalsky/Tabular/blob/master/BestPracticeRule_SplitDateAndTime.cs"
+          },
+          {
+           "text": " while live-connected to the model.\""
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "I think that for everything else the rule is created automatically so the only one you need to create is the Bi directional rule which is why you put up the screen shot, But for everything else. You just run the script and they automatically appear in the Best Practice Analyser?"
+          }
+         ]
+        },
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "the only other issue is that Split Date and Time is in the Best Practice Analyser with an error. Error while Evaluating expression on data columns. Input String was not in a correct format"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "826beb9f-e298-4320-8149-6c27ac66c915",
+     "author": "Debbie Edwards",
+     "isAuthor": false,
+     "date": "2021-10-15T15:49:39.376Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "I tried creating the first rule. But it comes back with an error. No Property of field 'UsedInRelationships' exists in type Model. I can definitely see that Annotations have been created but I'm not sure what has happened here?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "fc877158-e8e4-42a1-b4e3-cf5b1dc5719c",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-10-17T08:40:36.813Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "You must uncheck ‘Model’ in the scope portion of the rule. See how the article mentions only specific objects (various column types) for which this rule applies."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "d7f87a6c-e240-4e63-99e1-f2d19ea15c42",
+     "author": "Abhijith DSouza",
+     "isAuthor": false,
+     "date": "2022-11-24T07:37:14.184Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "This is a great blog and thanks for posting this. Have you tried automating it so that everytime a dataset refreshes in production this script is run automatically ? "
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "baf12d13-3612-4f2d-ac9a-346ffa662cc6",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-11-24T08:15:19.786Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Haven’t done that but it would be easy enough to do. These scripts can be run against a dataset using Tabular Editor’s command line options."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "vpaxtotabulareditor": {
+   "views": 1822,
+   "likes": 4,
+   "comments": [
+    {
+     "id": "42d43665-a68c-45bb-92a2-86d71ae36e42",
+     "author": "Farhan Soomro",
+     "isAuthor": false,
+     "date": "2021-02-04T18:49:19.641Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Mike I am getting division by zero error line 211"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "faccb54c-9436-4abb-a89f-6fefeb760045",
+     "author": "Michael Kovalsky",
+     "isAuthor": true,
+     "date": "2021-02-04T20:00:33.689Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Farhan, that probably means that your model is not processed. That error indicates that there is a partition with no segment count. Try processing your model, getting a new vpax file and running the script."
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "3c6dc07d-5871-4e97-8414-2cecb0fa0ade",
+     "author": "Barnyard Business Intelligence",
+     "isAuthor": false,
+     "date": "2021-09-22T11:39:43.801Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hello, when I follow the above I get Script executed successfully, 0 model changes.  Any insights in what I am missing in my execution?"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "77758eb2-b56d-423f-8b39-5278650e5be5",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2021-09-22T12:17:43.534Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Hi, make sure you have loaded the model file (.bim) in Tabular Editor before running the script. If you are running this against a model from a Power BI Desktop file you will need to set the following in Tabular Editor: File->Preferences-> and set ‘Allow unsupported Power BI features’."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "acfdb349-3531-44dc-b8ad-63fb81e463d5",
+       "author": "Barnyard Business Intelligence",
+       "isAuthor": false,
+       "date": "2021-09-22T13:29:55.404Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Thank you so much, I missed the allow unsupported Power BI features setting."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "xmlamisconceptions": {
+   "views": 4482,
+   "likes": 6,
+   "comments": [
+    {
+     "id": "41b5a6c2-8f5b-4413-9e28-190d45e25fba",
+     "author": "Garrett Fox",
+     "isAuthor": false,
+     "date": "2022-05-02T13:33:12.826Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Brilliant summary MK! I will be sure to use all of these justifications to get my company to turn on XMLA read-write. These leading edge practices make perfect sense for experienced data modelers. "
+        },
+        {
+         "text": "\n"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "The main challenge I see is on the capacity building side...I have been making progress little by little evangelizing/upskilling my team members teaching them data modeling basics within Power BI Desktop pbix file in our data team’s SharePoint folder. However, it sounds like the second I, as a much more advanced and experienced data modeler, start using XMLA read-write on our single source of truth dataset sitting in Premium, there is sort of no going back, and I would have to pull a bit of a bait and switch, and tell my teammates sorry now you can’t use those nice little PBI Desktop interfaces for basic data modeling and DAX measures,  bc now that I am doing advanced stuff with Tabular Editor via XMLA, you beginners have no choice but to learn with Tabular Editor now. It would kind of force them to skip the bunny slopes of data modeling and DAX within PBI Desktop..."
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "But armed with this knowledge that someone like yourself has found this workflow to be optimal for the above reasons, I can hopefully use that to reassure everyone that going all in on data modeling exclusively with Tabular Editor via XMLA read-write is the way to go, and hopefully they won’t lament the fact that data modeling in PBI desktop is no longer possible for that dataset"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "478436ee-c2b4-410e-b4e7-332789890936",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-05-02T14:10:34.091Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Great to hear, Garrett. Your comments on my other post inspired this post!"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "7bd9d6fd-0a9c-47da-8b94-eccb4f7524ff",
+     "author": "Corey Mantel",
+     "isAuthor": false,
+     "date": "2022-05-02T14:14:52.582Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi Michael.  Thanks for this.  We are 'all in' with this approach.  And I love it!"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "33c8917a-e632-43b1-b8ec-32edc74323df",
+     "author": "Bernat Agulló",
+     "isAuthor": false,
+     "date": "2022-05-02T14:36:17.613Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Even if you do not deploy with tabular, just keep a file copy on share point. Enabling incremental refresh also prevents dataset download and people still use it. Power bi service is not a SharePoint to download files 😀"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "370139d8-c4af-4464-a723-f2776e183cf6",
+     "author": "chrisherv",
+     "isAuthor": false,
+     "date": "2022-05-02T15:26:03.442Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Congratulations for this very nice post "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Very rich and enlightening"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "For us , for the sake of coherence & organization  :  "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "1) The source code is only carried by a pbix file (no bim files for datasets)"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "     Of course ,these latter can be enriched by the external tools features (tabular editor) "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "2) Most of the deployment is only done from these files (via manual deployments from desktop or CICD API) to the DEV workspaces"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "3) Except update of incremental datasets (on service,  DEV WS) which can be deployed from ALM toolkit & XMLA end point (read-write)   - no cicd here "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Only if the source master is still a pbix file"
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "4)Premium deployment pipelines will take over for TEST & PROD (metadata friendly) "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "5) We are impatiently awaiting a PBI API that will allow updating the metadata of an incremental dataset (source master is still a pbix file) "
+        }
+       ]
+      },
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "AND the unlocking of our pbix for the datasets updated by AML Toolkit"
+        }
+       ]
+      }
+     ],
+     "replies": []
+    },
+    {
+     "id": "5fa905b9-9b93-40fb-9dc8-026aefd24744",
+     "author": "abhinavsigh83",
+     "isAuthor": false,
+     "date": "2022-05-02T17:05:33.854Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "not just Tabular Editor, SSDT can be extensively used to modify/deploy like SSAS tabular but for the compatibility issues which we are able to overcome with config changes ! and not to forget the enterprise capability of accessing Power BI datasets from client libraries to enable client apps display power BI measures !"
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "03f2b224-acc4-4fe3-b618-a71c4610b97d",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-05-03T09:58:36.753Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Sure. one can use SSDT. But one can’t justly compare SSDT with Tabular Editor."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "f86ddad1-99c1-4570-b8f5-cf2382b88abc",
+     "author": "Simon Loughnane",
+     "isAuthor": false,
+     "date": "2022-07-06T09:18:03.780Z",
+     "blocks": [
+      {
+       "t": "p",
+       "c": [
+        {
+         "text": "Hi, I'm a newcomer to Tabular Editor so apologies if this is a basic/silly question. How does this pattern work with Power Query? I don't believe Tabular Editor has a Power Query interface. Would you build your Power Query data transformations in Power BI Desktop and then follow the steps listed in the section 'What if I already built my Model/Report in Power BI Desktop'? Thanks."
+        }
+       ]
+      }
+     ],
+     "replies": [
+      {
+       "id": "83d335d2-a7bb-4ad6-9f42-b9fbac93e2ff",
+       "author": "Michael Kovalsky",
+       "isAuthor": true,
+       "date": "2022-07-06T11:11:11.851Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "If you are yet to build your model, first prepare the set of fact/dimension tables in your data warehouse. This way you don’t need any power query transformations and it is a more sustainable and performant approach."
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "f75faaa2-16ac-4e06-b3b6-d9bcda36a248",
+       "author": "Erik Lindström",
+       "isAuthor": false,
+       "date": "2023-03-28T08:06:48.931Z",
+       "blocks": [
+        {
+         "t": "p",
+         "c": [
+          {
+           "text": "Yes and no. While I agree that not much M development is needed if you prepare the table properly, some development will be needed in order to parameterize the model properly and follow a dev/test/prod workflow."
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

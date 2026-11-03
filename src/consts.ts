@@ -11,6 +11,10 @@ export const SITE = {
   linkedin: 'https://www.linkedin.com/in/michaelkovalsky',
   github: 'https://github.com/m-kovalsky',
   locale: 'en-US',
+  // Cloudflare Worker that records views, likes and comments (see api/). Override with PUBLIC_API_URL for local dev.
+  api: (import.meta.env.PUBLIC_API_URL as string | undefined) || 'https://elegantbi-api.elegantbi.workers.dev',
+  // Cloudflare Turnstile site key (public) for the invisible bot check on comments.
+  turnstileSiteKey: (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? '0x4AAAAAAFyX80crGpOjrfjB',
 } as const;
 
 export const NAV = [

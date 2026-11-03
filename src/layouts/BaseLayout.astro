@@ -17,9 +17,10 @@ interface Props {
     categories: string[];
   };
   jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
 }
 
-const { title, description = SITE.description, image, article, jsonLd } = Astro.props;
+const { title, description = SITE.description, image, article, jsonLd, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} | Power BI, Tabular Modeling & DAX`;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/'), Astro.site);
 const ogImage = image
@@ -34,14 +35,22 @@ const ogImage = image
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline>
       try {
-        document.documentElement.dataset.theme = localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+        var stored = localStorage.getItem('theme');
+        document.documentElement.dataset.theme =
+          stored === 'light' || stored === 'dark'
+            ? stored
+            : matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark';
       } catch (e) {}
     </script>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="author" content={SITE.author} />
-    <meta name="theme-color" content="#060a0c" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#060a0c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8fafa" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/blog-feed.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />

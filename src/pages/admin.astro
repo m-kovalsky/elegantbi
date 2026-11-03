@@ -1,0 +1,300 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../consts';
+---
+
+<BaseLayout title="Admin" description="Comment moderation" noindex>
+  <div class="container admin">
+    <header class="page-header">
+      <span class="eyebrow">Admin</span>
+      <h1>Comments</h1>
+    </header>
+
+    {
+      !SITE.api ? (
+        <p class="muted">The comments API is not configured (PUBLIC_API_URL is empty).</p>
+      ) : (
+        <>
+          <form class="signin" data-signin hidden>
+            <label for="admin-token">Admin token</label>
+            <div class="signin-row">
+              <input id="admin-token" type="password" autocomplete="current-password" required />
+              <button class="btn btn-primary" type="submit">Sign in</button>
+            </div>
+            <p class="admin-status" data-signin-status role="status" />
+          </form>
+
+          <div data-panel hidden>
+            <div class="toolbar">
+              <div class="tabs" role="tablist">
+                <button type="button" role="tab" class="chip" data-tab="pending" aria-selected="true">
+                  Awaiting approval <span class="count" data-pending-count />
+                </button>
+                <button type="button" role="tab" class="chip" data-tab="published" aria-selected="false">
+                  Recently published
+                </button>
+              </div>
+              <button type="button" class="btn" data-signout>Sign out</button>
+            </div>
+            <p class="muted note">
+              While signed in on this browser, comments you post on articles appear as {SITE.author} (Author), and your own visits
+              aren't counted as views.
+            </p>
+            <p class="admin-status" data-panel-status role="status" />
+            <ul class="queue" data-queue />
+          </div>
+        </>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .admin {
+    max-width: 860px;
+  }
+
+  .signin {
+    display: grid;
+    gap: 0.6rem;
+    max-width: 480px;
+  }
+
+  .signin label {
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .signin-row {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .signin input {
+    flex: 1;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tabs .chip {
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+  }
+
+  .tabs .chip[aria-selected='true'] {
+    color: var(--text);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .note {
+    font-size: 0.9rem;
+  }
+
+  .admin-status:empty {
+    display: none;
+  }
+
+  .queue {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .queue :global(.item) {
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .queue :global(.item-head) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.8rem;
+    align-items: baseline;
+    font-size: 0.88rem;
+    color: var(--text-subtle);
+  }
+
+  .queue :global(.item-head strong) {
+    color: var(--text);
+    font-size: 0.98rem;
+  }
+
+  .queue :global(.item-head a) {
+    color: var(--link);
+  }
+
+  .queue :global(.item-body) {
+    margin: 0.6rem 0 0.9rem;
+    overflow-wrap: anywhere;
+  }
+
+  .queue :global(.item-body p) {
+    margin: 0 0 0.5rem;
+  }
+
+  .queue :global(.item-body a) {
+    color: var(--link);
+  }
+
+  .queue :global(.item-actions) {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .queue :global(.item-actions .btn) {
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .queue :global(.danger:hover) {
+    border-color: #f87171;
+    color: #f87171;
+  }
+</style>
+
+<script>
+  import { API, adminToken, api, formatDate, renderPlainText, setAdminToken, type LiveComment } from '../scripts/engagement';
+
+  const signin = document.querySelector<HTMLFormElement>('[data-signin]');
+  const panel = document.querySelector<HTMLElement>('[data-panel]');
+  const queue = document.querySelector<HTMLUListElement>('[data-queue]');
+  const panelStatus = document.querySelector<HTMLElement>('[data-panel-status]');
+  let tab: 'pending' | 'published' = 'pending';
+
+  async function verify(): Promise<boolean> {
+    try {
+      await api('/admin/check', { admin: true });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function show(signedIn: boolean) {
+    if (signin) signin.hidden = signedIn;
+    if (panel) panel.hidden = !signedIn;
+    if (signedIn) load();
+  }
+
+  function item(c: LiveComment) {
+    const li = document.createElement('li');
+    li.className = 'item';
+    const head = document.createElement('div');
+    head.className = 'item-head';
+    const name = document.createElement('strong');
+    name.textContent = c.name + (c.isAuthor ? ' (Author)' : '');
+    const link = document.createElement('a');
+    link.href = `/post/${c.slug}#comment-${c.id}`;
+    link.textContent = `/post/${c.slug}`;
+    const when = document.createElement('span');
+    when.textContent = formatDate(c.createdAt) + (c.parentId ? ' · reply' : '');
+    head.append(name, link, when);
+    const body = document.createElement('div');
+    body.className = 'item-body';
+    body.append(renderPlainText(c.body));
+    const actions = document.createElement('div');
+    actions.className = 'item-actions';
+    const act = (label: string, cls: string, run: () => Promise<unknown>) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `btn ${cls}`;
+      b.textContent = label;
+      b.addEventListener('click', async () => {
+        b.disabled = true;
+        try {
+          await run();
+          li.remove();
+          updateCount();
+        } catch (e) {
+          b.disabled = false;
+          if (panelStatus) panelStatus.textContent = (e as Error).message;
+        }
+      });
+      actions.append(b);
+    };
+    if (c.status === 'pending') act('Approve', 'btn-primary', () => api(`/admin/comments/${c.id}/approve`, { method: 'POST', body: '{}', admin: true }));
+    act('Delete', 'danger', () => {
+      if (!confirm('Delete this comment (and any replies to it)?')) return Promise.reject(new Error('Cancelled'));
+      return api(`/admin/comments/${c.id}`, { method: 'DELETE', admin: true });
+    });
+    li.append(head, body, actions);
+    return li;
+  }
+
+  function updateCount() {
+    const el = document.querySelector('[data-pending-count]');
+    if (el && tab === 'pending') el.textContent = String(queue?.children.length ?? 0);
+    if (queue && !queue.children.length && panelStatus) {
+      panelStatus.textContent = tab === 'pending' ? 'Nothing awaiting approval.' : 'No comments yet.';
+    }
+  }
+
+  async function load() {
+    if (!queue || !panelStatus) return;
+    queue.replaceChildren();
+    panelStatus.textContent = 'Loading…';
+    try {
+      const { comments } = await api<{ comments: LiveComment[] }>(`/admin/comments?status=${tab}`, { admin: true });
+      panelStatus.textContent = '';
+      comments.forEach((c) => queue.append(item(c)));
+      updateCount();
+    } catch (e) {
+      panelStatus.textContent = (e as Error).message;
+    }
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((b) =>
+    b.addEventListener('click', () => {
+      tab = b.dataset.tab as typeof tab;
+      document.querySelectorAll('[data-tab]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+      load();
+    }),
+  );
+
+  signin?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = signin.querySelector('input')!;
+    const status = signin.querySelector<HTMLElement>('[data-signin-status]')!;
+    setAdminToken(input.value.trim());
+    if (await verify()) {
+      input.value = '';
+      status.textContent = '';
+      show(true);
+    } else {
+      setAdminToken(null);
+      status.textContent = 'That token was not accepted.';
+    }
+  });
+
+  document.querySelector('[data-signout]')?.addEventListener('click', () => {
+    setAdminToken(null);
+    show(false);
+  });
+
+  if (API) {
+    if (adminToken()) verify().then((ok) => (ok ? show(true) : (setAdminToken(null), show(false))));
+    else show(false);
+  }
+</script>

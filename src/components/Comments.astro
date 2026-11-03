@@ -1,0 +1,585 @@
+---
+import Icon from './Icon.astro';
+import CommentItem from './CommentItem.astro';
+import { SITE } from '../consts';
+import type { LegacyComment } from '../utils/engagement';
+
+interface Props {
+  slug: string;
+  comments: LegacyComment[];
+  count: number;
+}
+
+const { slug, comments, count } = Astro.props;
+const enabled = Boolean(SITE.api);
+---
+
+<section id="comments" class="comments" data-comments data-slug={slug}>
+  <header class="comments-head">
+    <h2>
+      Comments <span class="comments-count" data-comment-count>{count}</span>
+    </h2>
+  </header>
+
+  {
+    enabled ? (
+      <form class="comment-form" data-comment-form novalidate>
+        <p class="comment-as" data-author-note hidden>
+          Posting as <strong>{SITE.author}</strong> <span class="comment-badge">Author</span>
+        </p>
+        <div class="field" data-name-field>
+          <label for="comment-name">Name</label>
+          <input id="comment-name" name="name" type="text" maxlength="60" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="comment-body">Comment</label>
+          <textarea id="comment-body" name="body" rows="4" maxlength="5000" required placeholder="Share a thought or ask a question…" />
+        </div>
+        <div class="hp" aria-hidden="true">
+          <label for="comment-website">Website</label>
+          <input id="comment-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="turnstile" data-turnstile />
+        <div class="form-row">
+          <p class="form-hint">Comments with links are reviewed before they appear.</p>
+          <button type="submit" class="btn btn-primary">Post comment</button>
+        </div>
+        <p class="form-status" data-form-status role="status" aria-live="polite" />
+      </form>
+    ) : (
+      <p class="comments-closed">New comments are temporarily unavailable.</p>
+    )
+  }
+
+  <ol class="comment-list" data-comment-list>
+    {
+      comments.map((c) => (
+        <CommentItem comment={c} canReply={enabled}>
+          <ol class="replies" data-replies>
+            {(c.replies ?? []).map((r) => (
+              <CommentItem comment={r} canReply={false} />
+            ))}
+          </ol>
+        </CommentItem>
+      ))
+    }
+  </ol>
+
+  <p class="comments-empty" data-comments-empty hidden={comments.length > 0}>
+    <Icon name="message" size={18} /> No comments yet. Be the first to share your thoughts.
+  </p>
+
+  <template data-reply-template>
+    <form class="comment-form reply-form" novalidate>
+      <p class="reply-to">Replying to <strong data-reply-label></strong></p>
+      <div class="field" data-name-field>
+        <label>Name<input name="name" type="text" maxlength="60" autocomplete="name" required /></label>
+      </div>
+      <div class="field">
+        <label>Reply<textarea name="body" rows="3" maxlength="5000" required></textarea></label>
+      </div>
+      <div class="hp" aria-hidden="true"><input name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+      <div class="turnstile" data-turnstile></div>
+      <div class="form-row">
+        <button type="button" class="btn" data-cancel-reply>Cancel</button>
+        <button type="submit" class="btn btn-primary">Post reply</button>
+      </div>
+      <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+    </form>
+  </template>
+</section>
+
+<style is:global>
+  .comments {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .comments-head h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .comments-count {
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .comment-form {
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .comment-form .field label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .comment-form .field > label {
+    margin-bottom: 0.35rem;
+  }
+
+  .comment-form input,
+  .comment-form textarea {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    background: var(--bg-soft);
+    color: var(--text);
+    font: 400 0.98rem/1.5 var(--font-sans);
+    resize: vertical;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .comment-form input:focus,
+  .comment-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .comment-form .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .reply-form .form-row {
+    justify-content: flex-end;
+  }
+
+  .form-hint {
+    margin: 0;
+    color: var(--text-subtle);
+    font-size: 0.83rem;
+  }
+
+  .form-status {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .form-status:empty {
+    display: none;
+  }
+
+  .form-status[data-kind='error'] {
+    color: #f87171;
+  }
+
+  .form-status[data-kind='ok'] {
+    color: var(--accent);
+  }
+
+  .comment-as,
+  .reply-to {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .comments-closed,
+  .comments-empty {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-subtle);
+  }
+
+  .comments-empty[hidden] {
+    display: none;
+  }
+
+  .comment-list,
+  .replies {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .comment-list > .comment + .comment {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .replies {
+    margin-left: 1.15rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--border);
+  }
+
+  .replies:empty {
+    display: none;
+  }
+
+  .replies > .comment {
+    margin-top: 1.1rem;
+  }
+
+  .comment-head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .comment-avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: hsl(var(--hue, 180) 45% 32%);
+    color: hsl(var(--hue, 180) 70% 92%);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .comment-avatar.is-author {
+    background: var(--accent-fill);
+    color: var(--accent-ink);
+  }
+
+  .comment-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.6rem;
+  }
+
+  .comment-name {
+    font-weight: 650;
+  }
+
+  .comment-badge {
+    padding: 0.05rem 0.45rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .comment-date {
+    color: var(--text-subtle);
+    font-size: 0.83rem;
+  }
+
+  .comment-body {
+    padding-left: calc(34px + 0.7rem);
+    font-size: 0.98rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+
+  .comment-body p {
+    margin: 0 0 0.6rem;
+  }
+
+  .comment-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .comment-body a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .comment-body pre {
+    margin: 0.5rem 0;
+    padding: 0.8rem 1rem;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--code-bg);
+    font: 0.83rem/1.6 var(--font-mono);
+  }
+
+  .comment-body img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0.5rem 0;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .comment-body ul,
+  .comment-body ol {
+    margin: 0.4rem 0;
+    padding-left: 1.3rem;
+  }
+
+  .comment-actions {
+    padding-left: calc(34px + 0.7rem);
+    margin-top: 0.35rem;
+  }
+
+  .comment-reply {
+    padding: 0.2rem 0;
+    border: 0;
+    background: none;
+    color: var(--text-subtle);
+    font: 600 0.83rem/1 var(--font-sans);
+    cursor: pointer;
+  }
+
+  .comment-reply:hover {
+    color: var(--accent);
+  }
+
+  .comment .reply-form {
+    margin: 0.9rem 0 0 calc(34px + 0.7rem);
+  }
+
+  .comment.is-new > .comment-card {
+    animation: comment-in 1.6s var(--ease);
+  }
+
+  @keyframes comment-in {
+    from {
+      background: var(--accent-soft);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .comment-body,
+    .comment-actions {
+      padding-left: 0;
+    }
+
+    .comment .reply-form {
+      margin-left: 0;
+    }
+
+    .replies {
+      margin-left: 0.4rem;
+      padding-left: 0.9rem;
+    }
+  }
+</style>
+
+<script>
+  import { SITE } from '../consts';
+  import { API, adminToken, api, loadPost, renderComment, type LiveComment } from '../scripts/engagement';
+
+  const section = document.querySelector<HTMLElement>('[data-comments]');
+  const slug = section?.dataset.slug ?? '';
+  const list = section?.querySelector<HTMLOListElement>('[data-comment-list]');
+  const countEls = () => document.querySelectorAll<HTMLElement>('[data-comment-count]');
+  const isAdmin = Boolean(adminToken());
+  const NAME_KEY = 'ebi-comment-name';
+  const opened = Date.now();
+
+  let turnstileReady: Promise<void> | null = null;
+  function loadTurnstile() {
+    if (!SITE.turnstileSiteKey) return Promise.resolve();
+    turnstileReady ??= new Promise<void>((resolve) => {
+      const s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      s.async = true;
+      s.onload = () => resolve();
+      document.head.append(s);
+    });
+    return turnstileReady;
+  }
+
+  async function mountTurnstile(form: HTMLFormElement) {
+    const host = form.querySelector<HTMLElement>('[data-turnstile]');
+    if (!SITE.turnstileSiteKey || !host || host.dataset.mounted) return;
+    host.dataset.mounted = '1';
+    await loadTurnstile();
+    // @ts-ignore - provided by the Turnstile script
+    const widgetId = window.turnstile.render(host, {
+      sitekey: SITE.turnstileSiteKey,
+      appearance: 'interaction-only',
+      // Failures are handled server-side (the comment is queued for review), so don't surface them as errors.
+      'error-callback': () => true,
+    });
+    host.dataset.widgetId = widgetId;
+  }
+
+  function turnstileToken(form: HTMLFormElement): string | undefined {
+    const host = form.querySelector<HTMLElement>('[data-turnstile]');
+    // @ts-ignore
+    return host?.dataset.widgetId ? window.turnstile?.getResponse(host.dataset.widgetId) : undefined;
+  }
+
+  function resetTurnstile(form: HTMLFormElement) {
+    const host = form.querySelector<HTMLElement>('[data-turnstile]');
+    // @ts-ignore
+    if (host?.dataset.widgetId) window.turnstile?.reset(host.dataset.widgetId);
+  }
+
+  function prepareForm(form: HTMLFormElement) {
+    const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
+    if (isAdmin) {
+      form.querySelector<HTMLElement>('[data-name-field]')?.setAttribute('hidden', '');
+      nameInput?.removeAttribute('required');
+      form.querySelector<HTMLElement>('[data-author-note]')?.removeAttribute('hidden');
+    } else if (nameInput) {
+      try {
+        nameInput.value = localStorage.getItem(NAME_KEY) ?? '';
+      } catch {}
+    }
+    form.addEventListener('focusin', () => mountTurnstile(form), { once: true });
+  }
+
+  function bumpCount(by: number) {
+    let total = 0;
+    countEls().forEach((el) => (el.textContent = String((total = Number(el.textContent || 0) + by))));
+    document.querySelectorAll('[data-comment-noun]').forEach((el) => (el.textContent = total === 1 ? 'comment' : 'comments'));
+    section?.querySelector('[data-comments-empty]')?.setAttribute('hidden', '');
+  }
+
+  function addToList(c: LiveComment, highlight = false) {
+    if (!list || document.getElementById(`comment-${c.id}`)) return false;
+    const node = renderComment(c, !c.parentId);
+    if (highlight) node.classList.add('is-new');
+    if (c.parentId) {
+      const parent = document.getElementById(`comment-${c.parentId}`);
+      const replies = parent?.querySelector<HTMLOListElement>(':scope > [data-replies]');
+      if (replies) {
+        replies.append(node);
+        return true;
+      }
+      // Orphaned reply (parent removed): show it as a top-level comment.
+    }
+    const ol = document.createElement('ol');
+    ol.className = 'replies';
+    ol.dataset.replies = '';
+    node.append(ol);
+    list.append(node);
+    return true;
+  }
+
+  async function submit(form: HTMLFormElement, parentId: string | null) {
+    const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const data = new FormData(form);
+    const name = String(data.get('name') ?? '').trim();
+    const body = String(data.get('body') ?? '').trim();
+    if ((!isAdmin && !name) || !body) {
+      status.dataset.kind = 'error';
+      status.textContent = 'Please fill in your name and comment.';
+      return;
+    }
+    button.disabled = true;
+    status.dataset.kind = '';
+    status.textContent = 'Posting…';
+    try {
+      const res = await api<{ status: 'published' | 'pending'; reason?: 'link' | 'review'; comment: LiveComment }>(`/posts/${slug}/comments`, {
+        method: 'POST',
+        admin: isAdmin,
+        body: JSON.stringify({
+          name,
+          body,
+          parentId,
+          website: data.get('website'),
+          elapsed: Date.now() - opened,
+          turnstileToken: turnstileToken(form),
+        }),
+      });
+      try {
+        if (name) localStorage.setItem(NAME_KEY, name);
+      } catch {}
+      form.querySelector<HTMLTextAreaElement>('textarea')!.value = '';
+      if (res.status === 'published') {
+        addToList(res.comment, true);
+        bumpCount(1);
+        status.dataset.kind = 'ok';
+        status.textContent = 'Thanks! Your comment is live.';
+        if (parentId) form.remove();
+        document.getElementById(`comment-${res.comment.id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      } else {
+        status.dataset.kind = 'ok';
+        status.textContent =
+          res.reason === 'link'
+            ? 'Thanks! Your comment contains a link, so it will appear once it has been approved.'
+            : 'Thanks! Your comment will appear once it has been approved.';
+      }
+    } catch (err) {
+      status.dataset.kind = 'error';
+      status.textContent = (err as Error).message;
+    } finally {
+      button.disabled = false;
+      resetTurnstile(form);
+    }
+  }
+
+  if (section && API && slug) {
+    const mainForm = section.querySelector<HTMLFormElement>('[data-comment-form]');
+    if (mainForm) {
+      prepareForm(mainForm);
+      mainForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submit(mainForm, null);
+      });
+    }
+
+    const template = section.querySelector<HTMLTemplateElement>('[data-reply-template]');
+    section.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const replyBtn = target.closest<HTMLButtonElement>('[data-reply-to]');
+      if (replyBtn && template) {
+        const li = replyBtn.closest<HTMLLIElement>('li.comment')!;
+        const existing = li.querySelector<HTMLFormElement>(':scope > .reply-form');
+        if (existing) return existing.querySelector('textarea')?.focus();
+        section.querySelectorAll('.reply-form').forEach((f) => f.remove());
+        const form = template.content.firstElementChild!.cloneNode(true) as HTMLFormElement;
+        form.querySelector('[data-reply-label]')!.textContent = replyBtn.dataset.replyName ?? '';
+        li.querySelector(':scope > .comment-card')!.after(form);
+        prepareForm(form);
+        form.addEventListener('submit', (ev) => {
+          ev.preventDefault();
+          submit(form, replyBtn.dataset.replyTo!);
+        });
+        form.querySelector('[data-cancel-reply]')?.addEventListener('click', () => form.remove());
+        const nameInput = form.querySelector<HTMLInputElement>('input[name="name"]');
+        (isAdmin || nameInput?.value ? form.querySelector('textarea') : nameInput)?.focus();
+      }
+    });
+
+    // Load comments posted on the new site (imported Wix comments are already in the page).
+    loadPost(slug)
+      .then(({ comments }) => {
+        let added = 0;
+        for (const c of comments) if (addToList(c)) added++;
+        if (added) bumpCount(added);
+        if (location.hash.startsWith('#comment-')) document.querySelector(location.hash)?.scrollIntoView();
+      })
+      .catch(() => {});
+  }
+</script>

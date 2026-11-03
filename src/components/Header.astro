@@ -278,12 +278,25 @@ const isActive = (href: string) =>
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
+  const systemTheme = matchMedia('(prefers-color-scheme: light)');
+  const prefersLight = () => systemTheme.matches;
+
   document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
     document.documentElement.dataset.theme = next;
     try {
-      localStorage.setItem('theme', next);
+      // Choosing the theme that matches the device setting goes back to following the device.
+      if ((next === 'light') === prefersLight()) localStorage.removeItem('theme');
+      else localStorage.setItem('theme', next);
     } catch {}
+  });
+
+  systemTheme.addEventListener('change', () => {
+    let stored = null;
+    try {
+      stored = localStorage.getItem('theme');
+    } catch {}
+    if (!stored) document.documentElement.dataset.theme = prefersLight() ? 'light' : 'dark';
   });
 
   const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');

@@ -1,0 +1,72 @@
+---
+import type { LegacyComment, Segment } from '../utils/engagement';
+import { avatarHue, initials } from '../scripts/engagement';
+
+interface Props {
+  comment: LegacyComment;
+  canReply: boolean;
+}
+
+const { comment: c, canReply } = Astro.props;
+const date = new Date(c.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+const external = (href: string) => /^https?:\/\//.test(href) && !/^https?:\/\/(www\.)?elegantbi\.com/.test(href);
+const text = (segs: Segment[]) => segs.map((s) => s.text).join('');
+---
+
+<li class="comment" id={`comment-${c.id}`} data-comment-id={c.id}>
+  <article class="comment-card">
+    <header class="comment-head">
+      <span
+        class:list={['comment-avatar', { 'is-author': c.isAuthor }]}
+        style={c.isAuthor ? undefined : `--hue:${avatarHue(c.author)}`}
+        aria-hidden="true">{initials(c.author)}</span
+      >
+      <div class="comment-meta">
+        <span class="comment-name">{c.author}</span>
+        {c.isAuthor && <span class="comment-badge">Author</span>}
+        <time class="comment-date" datetime={c.date}>{date}</time>
+      </div>
+    </header>
+    <div class="comment-body">
+      {
+        c.blocks.map((b) => {
+          if (b.t === 'p')
+            return (
+              <p>
+                {b.c.map((s) =>
+                  s.href ? (
+                    <a href={s.href} {...(external(s.href) ? { target: '_blank', rel: 'nofollow ugc noopener noreferrer' } : {})}>
+                      {s.text}
+                    </a>
+                  ) : s.b ? (
+                    <strong>{s.text}</strong>
+                  ) : s.i ? (
+                    <em>{s.text}</em>
+                  ) : (
+                    s.text
+                  ),
+                )}
+              </p>
+            );
+          if (b.t === 'code') return <pre><code>{b.text}</code></pre>;
+          if (b.t === 'ul' || b.t === 'ol') {
+            const items = b.items.map((it) => <li>{text(it)}</li>);
+            return b.t === 'ul' ? <ul>{items}</ul> : <ol>{items}</ol>;
+          }
+          if (b.t === 'img' || b.t === 'gif') return <img src={b.src} alt="Image attached to comment" loading="lazy" width={b.w} height={b.h} />;
+          return null;
+        })
+      }
+    </div>
+    {
+      canReply && (
+        <footer class="comment-actions">
+          <button type="button" class="comment-reply" data-reply-to={c.id} data-reply-name={c.author}>
+            Reply
+          </button>
+        </footer>
+      )
+    }
+  </article>
+  <slot />
+</li>

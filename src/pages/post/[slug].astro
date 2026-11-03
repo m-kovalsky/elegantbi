@@ -7,6 +7,8 @@ import Cover from '../../components/Cover.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import PostCard from '../../components/PostCard.astro';
 import Icon from '../../components/Icon.astro';
+import Comments from '../../components/Comments.astro';
+import { legacyEngagement } from '../../utils/engagement';
 import { SITE } from '../../consts';
 import {
   categoryUrl,
@@ -42,6 +44,7 @@ const { post, newer, older, related } = Astro.props;
 const { title, description, pubDate, updatedDate, categories, heroImage, heroAlt } = post.data;
 const { Content, headings } = await render(post);
 const minutes = readingTime(post.body);
+const engagement = legacyEngagement(post.id);
 const url = new URL(postUrl(post), Astro.site).href;
 const shareImage = heroImage ? new URL((await getImage({ src: heroImage, width: 1200, format: 'jpeg' })).src, Astro.site).href : undefined;
 
@@ -105,6 +108,8 @@ const share = {
               )
             }
             <span><Icon name="clock" size={14} /> {minutes} min read</span>
+            <span data-views-wrap data-base={engagement.views}><Icon name="eye" size={14} /> <span data-views>{engagement.views.toLocaleString('en-US')}</span> views</span>
+            <a href="#comments" class="meta-link"><Icon name="message" size={14} /> <span data-comment-count>{engagement.commentCount}</span> <span data-comment-noun>{engagement.commentCount === 1 ? 'comment' : 'comments'}</span></a>
           </div>
         </div>
       </div>
@@ -140,7 +145,19 @@ const share = {
             ))}
           </div>
           <div class="share">
-            <span>Share</span>
+            <button
+              type="button"
+              class="like-btn"
+              data-like
+              data-base={engagement.likes}
+              aria-pressed="false"
+              aria-label="Like this article"
+              disabled={!SITE.api}
+            >
+              <Icon name="heart" size={16} />
+              <span data-likes>{engagement.likes}</span>
+            </button>
+            <span class="share-label">Share</span>
             <a href={share.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"><Icon name="linkedin" size={15} /></a>
             <a href={share.x} target="_blank" rel="noopener noreferrer" aria-label="Share on X"><Icon name="x_social" size={15} /></a>
             <button type="button" data-copy-link={url} aria-label="Copy link"><Icon name="link" size={16} /></button>
@@ -163,6 +180,8 @@ const share = {
             </div>
           </div>
         </aside>
+
+        <Comments slug={post.id} comments={engagement.comments} count={engagement.commentCount} />
 
         {
           (newer || older) && (
@@ -414,8 +433,54 @@ const share = {
     font-size: 0.85rem;
   }
 
-  .share span {
-    margin-right: 0.3rem;
+  .share .share-label {
+    margin: 0 0.3rem 0 0.6rem;
+  }
+
+  .like-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.4rem;
+    width: auto !important;
+    padding: 0 0.85rem;
+    font: 600 0.85rem/1 var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .like-btn[aria-pressed='true'] {
+    color: #fb7185 !important;
+    border-color: #fb7185 !important;
+    background: rgb(251 113 133 / 0.1) !important;
+  }
+
+  .like-btn[aria-pressed='true'] :global(svg) {
+    fill: currentColor;
+  }
+
+  .like-btn.pop :global(svg) {
+    animation: like-pop 0.4s var(--ease);
+  }
+
+  @keyframes like-pop {
+    40% {
+      transform: scale(1.35);
+    }
+  }
+
+  .like-btn:disabled {
+    cursor: default;
+    opacity: 0.8;
+  }
+
+  .meta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.2s;
+  }
+
+  .meta-link:hover {
+    color: var(--accent);
   }
 
   .share a,
@@ -736,4 +801,39 @@ const share = {
       } catch {}
     }),
   );
-</script>
+
+  // Live views and likes (Wix-era totals are the baseline rendered into the page)
+  import { API, fullNumber, loadPost, api } from '../../scripts/engagement';
+
+  const slug = document.querySelector<HTMLElement>('[data-comments]')?.dataset.slug;
+  const likeBtn = document.querySelector<HTMLButtonElement>('[data-like]');
+  if (API && slug) {
+    const viewsWrap = document.querySelector<HTMLElement>('[data-views-wrap]');
+    const baseViews = Number(viewsWrap?.dataset.base ?? 0);
+    const baseLikes = Number(likeBtn?.dataset.base ?? 0);
+    const setLikes = (likes: number, liked: boolean) => {
+      document.querySelectorAll('[data-likes]').forEach((el) => (el.textContent = fullNumber(baseLikes + likes)));
+      likeBtn?.setAttribute('aria-pressed', String(liked));
+    };
+    loadPost(slug)
+      .then((d) => {
+        document.querySelectorAll('[data-views]').forEach((el) => (el.textContent = fullNumber(baseViews + d.views)));
+        setLikes(d.likes, d.liked);
+      })
+      .catch(() => {});
+    likeBtn?.addEventListener('click', async () => {
+      likeBtn.disabled = true;
+      try {
+        const r = await api<{ likes: number; liked: boolean }>(`/posts/${slug}/like`, { method: 'POST', body: '{}' });
+        setLikes(r.likes, r.liked);
+        if (r.liked) {
+          likeBtn.classList.remove('pop');
+          void likeBtn.offsetWidth;
+          likeBtn.classList.add('pop');
+        }
+      } catch {
+      } finally {
+        likeBtn.disabled = false;
+      }
+    });
+  }</script>

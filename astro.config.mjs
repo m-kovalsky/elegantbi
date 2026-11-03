@@ -12,7 +12,7 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
   compressHTML: true,
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes('/admin') })],
   markdown: {
     processor: satteri({ hastPlugins: [externalLinks] }),
     shikiConfig: {

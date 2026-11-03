@@ -120,6 +120,10 @@ main {
   flex: 1;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 img,
 svg,
 video,
