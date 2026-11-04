@@ -55,7 +55,7 @@ import sempy_labs as labs
 labs.vertipaq_analyzer()
 ```
 
-[Vertipaq Analyzer](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.html#sempy_labs.vertipaq_analyzer) shows the memory footprint of your semantic model across the model, tables, columns, partitions, relationships and hierarchies. You can filter each view and toggle data bars to quickly find the largest objects. If your model is in Direct Lake mode (over a lakehouse), there is also a Delta Analyzer button which analyzes the source delta tables and merges the results right into the view.
+[Vertipaq Analyzer](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.html#sempy_labs.vertipaq_analyzer) shows the memory footprint of your semantic model across the model, tables, columns, partitions, relationships and hierarchies. You can filter each view and toggle data bars to quickly find the largest objects. If your model is in Direct Lake mode (over a lakehouse), there is also a Delta Analyzer button which analyzes the source delta tables and merges the results right into the view. Just note that running the Delta Analyzer stats requires the a PySpark notebook.
 
 ![Vertipaq Analyzer showing table sizes with data bars](./vertipaq-analyzer.png)
 ### Delta Analyzer
@@ -66,7 +66,7 @@ import sempy_labs as labs
 labs.delta_analyzer()
 ```
 
-[Delta Analyzer](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.html#sempy_labs.delta_analyzer) breaks down a delta table into its parquet files, row groups, column chunks and columns. Just pick the workspace, lakehouse and table. This is especially useful for understanding how well your delta tables are set up for Direct Lake.
+[Delta Analyzer](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.html#sempy_labs.delta_analyzer) breaks down a delta table into its parquet files, row groups, column chunks and columns. Just pick the workspace, lakehouse and table. This is especially useful for understanding how well your delta tables are set up for Direct Lake. Note that this UI must be run in a PySpark notebook.
 
 ![Delta Analyzer showing the column chunks of a delta table](./delta-analyzer.png)
 ### Lineage View
@@ -77,7 +77,9 @@ import sempy_labs.semantic_model
 semantic_model.lineage_view()
 ```
 
-[Lineage View](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.semantic_model.html#sempy_labs.semantic_model.lineage_view) shows your semantic model along with all of its downstream reports (across workspaces). Each report is scanned for broken elements - references to columns, measures or hierarchies which no longer exist in the model. Not only does it find them, it lets you fix them. Select a valid replacement for each broken object, click save and the reports are updated. You can also rebind reports to a different semantic model and even scan Excel files on your machine which connect to the model.
+[Lineage View](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.semantic_model.html#sempy_labs.semantic_model.lineage_view) shows your semantic model along with all of its downstream reports (across workspaces). Clicking 'Analyze' scans each report for broken elements - references to columns, measures or hierarchies which no longer exist in the model. Not only does it find them, it lets you fix them. Select a valid replacement for each broken object, click save and the reports are updated. This solves one of the most longstanding and painful issues for Power BI report developers.
+
+You can also rebind reports to a different semantic model and even scan Excel files on your machine which connect to the model.
 
 ![Lineage View showing a semantic model, its downstream reports and a broken measure reference](./lineage-view.png)
 ### Find Unused Objects
@@ -91,7 +93,7 @@ semantic_model.find_unused_objects()
 Removing unused objects is one of the easiest ways to make your model smaller and faster. The hard part is knowing what is actually unused. [Find Unused Objects](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.semantic_model.html#sempy_labs.semantic_model.find_unused_objects) offers 2 methods for figuring this out:
 
 1. Workspace monitoring - analyzes the DAX (and MDX) queries run against the model over a time frame of your choosing.
-2. Downstream reports - analyzes the objects used in the reports built on the model.
+2. Downstream reports - analyzes the objects used in the reports built on the model. As of version 0.18.0, this analyzes downstream reports across workspaces (previously it only checked the workspace in which the semantic model resides).
 
 Dependencies are taken into account (i.e. a column which is only used inside a measure is not unused), and the results are shown as a table -> column/measure tree.
 
@@ -113,7 +115,7 @@ In my [previous post](/post/direct-lake-migration) on Direct Lake migration, the
 
 ![The Analyze step of the Direct Lake migration wizard](./direct-lake-migration.png)
 
-Additionally, calculated columns and calculated tables can now be migrated as well (using [Direct Lake on OneLake](https://learn.microsoft.com/fabric/fundamentals/direct-lake-overview), currently in preview).
+Additionally, calculated columns and calculated tables are now migrated as well (currently in [preview](https://learn.microsoft.com/fabric/fundamentals/direct-lake-overview)).
 
 ### Refresh Manager
 
@@ -123,7 +125,7 @@ import sempy_labs.semantic_model
 semantic_model.refresh_manager()
 ```
 
-[Refresh Manager](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.semantic_model.html#sempy_labs.semantic_model.refresh_manager) gives you full control over refreshing your semantic model. Refresh the entire model or just specific tables or partitions, and set the refresh type, commit mode, max parallelism, retry count and whether to apply the refresh policy. You can watch the status of the refresh live, browse the refresh history and see the scheduled refresh settings. My favorite feature is 'Visualize refresh' - this runs the refresh under a trace and shows a timeline of how long each table and partition took to process. This makes finding the bottleneck in a slow refresh quite simple.
+[Refresh Manager](https://semantic-link-labs.readthedocs.io/en/stable/sempy_labs.semantic_model.html#sempy_labs.semantic_model.refresh_manager) gives you full control over refreshing your semantic model. Refresh the entire model or just specific tables or partitions, and set the refresh type, commit mode, max parallelism, retry count and whether to apply the refresh policy. You can watch the status of the refresh live, browse the refresh history and see the scheduled refresh settings. You can even optionally visualize the refresh. Selecting 'Visualize refresh' - runs the refresh under a trace and shows a timeline of how long each table and partition took to process. This makes finding the bottleneck in a slow refresh quite simple.
 
 ![Refresh Manager with refresh options and refresh history](./refresh-manager.png)
 
